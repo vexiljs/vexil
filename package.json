@@ -1,0 +1,23 @@
+{
+  "name": "vexil",
+  "version": "0.1.0",
+  "description": "Vexil is a library for web building",
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vexiljs/vexil.git"
+  },
+  "keywords": [
+    "vexil",
+    "vexiljs"
+  ],
+  "author": "longhao he <longhaohe@gmail.com> (http://longhaohe.com/)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/vexiljs/vexil/issues"
+  },
+  "homepage": "https://github.com/vexiljs/vexil#readme"
+}
