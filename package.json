@@ -49,5 +49,8 @@
     "vexil-loader": "0.0.2",
     "webpack": "^1.13.1",
     "webpack-dev-server": "^1.14.1"
+  },
+  "dependencies": {
+    "ob.js": "^0.1.4"
   }
 }

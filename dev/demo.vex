@@ -12,21 +12,45 @@
 </template>
 
 <script>
-const scope = {
-  arr: ['This is first paragraph', 'This is second paragraph'],
-  styl: 'font-size: 32px; color: red',
-  claz: 'demo-grid',
-  title: 'This is title!',
-  name: 'world',
-  hello (event) {
-    let target = event.target
-    this.name += '!!!'
-    let text = target.textContent + ' ' + this.name
-    let output = document.getElementById('output')
-    output.innerText += '\n' + text
+module.exports = {
+  data: {
+    arr: ['This is first paragraph', 'This is second paragraph'],
+    fontSize: 24,
+    styl2: ' color: red',
+    claz: 'demo-grid',
+    title: 'This is title!',
+    name: 'world',
   },
+  computed: {
+    styl1 () {
+      return `font-size: ${this.fontSize}px`
+    },
+    styl () {
+      return `${this.styl1};${this.styl2}`
+    }
+  },
+  methods: {
+    hello (event) {
+      let target = event.target
+      this.name += '!!!'
+      let text = `${target.textContent} ${this.name}`
+      let output = document.getElementById('output')
+      output.innerText += '\n' + text
+    },
+  },
+  created () {
+    this.name = 'Vexil'
+  },
+  mounted () {
+    setInterval(() => {
+      if (this.fontSize <= 36) {
+        this.fontSize++
+      } else {
+        this.fontSize = 36
+      }
+    }, 500)
+  }
 }
-module.exports = scope
 </script>
 
 <style>

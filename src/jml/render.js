@@ -10,7 +10,7 @@ import {
 } from '../dom/'
 import {isArray} from '../util/'
 
-export default function render (jml, scope, sub) {
+export default function render (jml, vexil, scope) {
   let res
   if (!jml) {
     res = ''
@@ -18,44 +18,44 @@ export default function render (jml, scope, sub) {
     let [node, attributes, children] = jml
     if (node === 'template') {
       node = createFragment(node)
-      attributes && computeAttributes(attributes, scope, sub, (newSub) => {
-        children && appendChildren(node, children, scope, newSub)
+      attributes && computeAttributes(attributes, vexil, scope, (newScope) => {
+        children && appendChildren(node, children, vexil, newScope)
       })
     } else {
       node = createElement(node)
-      attributes && applyAttributes(node, attributes, scope, sub)
-      children && appendChildren(node, children, scope, sub)
+      attributes && applyAttributes(node, attributes, vexil, scope)
+      children && appendChildren(node, children, vexil, scope)
     }
     return node
   } else if (typeof jml === 'function') {
-    res = evaluate(jml, scope, sub)
+    res = evaluate(jml, vexil, scope)
   } else {
     res = jml
   }
   return createText(res)
 }
 
-function applyAttributes (node, attributes, scope, sub) {
+function applyAttributes (node, attributes, vexil, scope) {
   let attr, prop, val
   Object.keys(attributes).forEach(key => {
     if (key[0] === '@') { // event
       node.addEventListener(key.slice(1), (event) => {
-        sub.$event = event
-        evaluate(attributes[key], scope, sub)
+        scope.$event = event
+        evaluate(attributes[key], vexil, scope)
       })
     } else {
       prop = VALUES[key]
       if (prop) {
         val = attributes[key]
         if (typeof val === 'function') {
-          val = evaluate(val, scope, sub)
+          val = evaluate(val, vexil, scope)
         }
         node[prop] = val
       } else {
         attr = createAttribute(key)
         val = attributes[key]
         if (typeof val === 'function') {
-          val = evaluate(val, scope, sub)
+          val = evaluate(val, vexil, scope)
         }
         setAttribute(attr, val)
         applyAttribute(node, attr)
@@ -64,38 +64,38 @@ function applyAttributes (node, attributes, scope, sub) {
   })
 }
 
-function computeAttributes (attributes, scope, sub, callback) {
+function computeAttributes (attributes, vexil, scope, callback) {
   let $if = attributes['*if']
   if ($if) {
-    $if = evaluate($if, scope, sub)
+    $if = evaluate($if, vexil, scope)
     if (!$if) return
   }
   let $items = attributes['*for']
   if ($items) {
-    $items = evaluate($items, scope, sub)
+    $items = evaluate($items, vexil, scope)
     if ($items && $items.length) {
-      let newSub = Object.assign({}, sub)
+      let newScope = Object.assign({}, scope)
       let subKey = attributes['_forKey']
       $items.forEach((v, k) => {
-        newSub[subKey] = v
-        newSub.$index = k
-        callback(newSub)
+        newScope[subKey] = v
+        newScope.$index = k
+        callback(newScope)
       })
     }
   } else {
-    callback(scope, sub)
+    callback(vexil, scope)
   }
 }
 
-function appendChildren (node, children, scope, sub) {
+function appendChildren (node, children, vexil, scope) {
   children.forEach(child => {
-    appendChild(node, render(child, scope, sub))
+    appendChild(node, render(child, vexil, scope))
   })
 }
 
-function evaluate (func, scope, sub) {
+function evaluate (func, scope, subScope) {
   try {
-    return func(scope, sub)
+    return func(scope, subScope)
   } catch (err) {
     return undefined
   }

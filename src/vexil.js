@@ -3,16 +3,27 @@ import {
   appendChild,
 } from './dom/'
 import render from './jml/'
+import ob from 'ob.js'
 
 export default class Vexil {
   constructor (vexil) {
-    Object.assign(this, vexil)
+    this.$jml = vexil.$jml
+    this.$created = vexil.created
+    this.$mounted = vexil.mounted
+
+    this.$ob = ob(this).reactive(vexil)
+
+    this.render()
+
+    this.$created && this.$created()
   }
   render () {
-    this.dom = render(this.$jml, this)
+    this.$dom = render(this)
   }
   mount (selector) {
-    this.root = query(selector)
-    appendChild(this.root, this.dom)
+    this.$domRoot = query(selector)
+    appendChild(this.$domRoot, this.$dom)
+
+    this.$mounted && this.$mounted()
   }
 }

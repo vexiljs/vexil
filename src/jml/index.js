@@ -1,5 +1,5 @@
 import render from './render'
 
-export default function (jml, scope) {
-  return render(jml, scope, {})
+export default function (vexil) {
+  return render(vexil.$jml, vexil, {})
 }
