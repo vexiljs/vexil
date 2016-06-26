@@ -1,0 +1,60 @@
+<template>
+<div class="demo">
+  <div class="demo-item">
+    <h1 :text="title" :style="styl"></h1>
+    <p *for="p in arr" :class="claz" :text="($index + 1) + '. ' + p"></p>
+  </div>
+  <div class="demo-item">
+    <button @click="hello($event)">hello</button>
+    <pre id="output"></pre>
+  </div>
+</div>
+</template>
+
+<script>
+const scope = {
+  arr: ['This is first paragraph', 'This is second paragraph'],
+  styl: 'font-size: 32px; color: red',
+  claz: 'demo-grid',
+  title: 'This is title!',
+  name: 'world',
+  hello (event) {
+    let target = event.target
+    this.name += '!!!'
+    let text = target.textContent + ' ' + this.name
+    let output = document.getElementById('output')
+    output.innerText += '\n' + text
+  },
+}
+module.exports = scope
+</script>
+
+<style>
+.demo {
+  width: 80%;
+  max-width: 400px;
+  margin: 50vh auto 0;
+  transform: translateY(-50%);
+}
+.demo-item {
+  position: relative;
+  padding: 15px;
+  background-color: lightgray;
+  counter-increment: c;
+}
+.demo-item+.demo-item {
+  margin-top: 30px;
+}
+.demo-item::before {
+  content: "demo "counter(c);
+  position: absolute;
+  top: -15px;
+  left: -20px;
+}
+.demo-grid:nth-child(odd) {
+  background-color: lightblue;
+}
+.demo-grid:nth-child(even) {
+  background-color: lightgreen;
+}
+</style>
