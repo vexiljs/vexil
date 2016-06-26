@@ -1,8 +1,8 @@
 import {
   query,
   appendChild,
-} from './dom'
-import render from './render'
+} from './dom/'
+import render from './jml/'
 
 export default class Vexil {
   constructor (vexil) {

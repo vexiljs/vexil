@@ -7,14 +7,10 @@ import {
   setAttribute,
   applyAttribute,
   VALUES,
-} from './dom'
-import {isArray} from './util'
+} from '../dom/'
+import {isArray} from '../util/'
 
-export default function render (jml, scope) {
-  return translate(jml, scope, {})
-}
-
-function translate (jml, scope, sub) {
+export default function render (jml, scope, sub) {
   let res
   if (!jml) {
     res = ''
@@ -93,7 +89,7 @@ function computeAttributes (attributes, scope, sub, callback) {
 
 function appendChildren (node, children, scope, sub) {
   children.forEach(child => {
-    appendChild(node, translate(child, scope, sub))
+    appendChild(node, render(child, scope, sub))
   })
 }
 
