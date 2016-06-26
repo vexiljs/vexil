@@ -36,7 +36,7 @@ export default function render (jml, vexil, scope) {
 }
 
 function applyAttributes (node, attributes, vexil, scope) {
-  let attr, prop, val
+  let attr
   Object.keys(attributes).forEach(key => {
     if (key[0] === '@') { // event
       node.addEventListener(key.slice(1), (event) => {
@@ -44,20 +44,26 @@ function applyAttributes (node, attributes, vexil, scope) {
         evaluate(attributes[key], vexil, scope)
       })
     } else {
-      prop = VALUES[key]
+      let val = attributes[key]
+      let prop = VALUES[key]
       if (prop) {
-        val = attributes[key]
         if (typeof val === 'function') {
-          val = evaluate(val, vexil, scope)
+          node[prop] = bind(val, (newVal, oldVal) => {
+            node[prop] = newVal
+          }, vexil, scope)
+        } else {
+          node[prop] = val
         }
-        node[prop] = val
       } else {
         attr = createAttribute(key)
-        val = attributes[key]
         if (typeof val === 'function') {
-          val = evaluate(val, vexil, scope)
+          setAttribute(attr, bind(val, (newVal, oldVal) => {
+            setAttribute(attr, newVal)
+            applyAttribute(node, attr)
+          }, vexil, scope))
+        } else {
+          setAttribute(attr, val)
         }
-        setAttribute(attr, val)
         applyAttribute(node, attr)
       }
     }
@@ -99,4 +105,11 @@ function evaluate (func, scope, subScope) {
   } catch (err) {
     return undefined
   }
+}
+
+const WATCH_OPTION = {deep: true}
+function bind (func, callback, scope, subScope) {
+  return scope.$ob.watch(() => {
+    return evaluate(func, scope, subScope)
+  }, callback, WATCH_OPTION).value
 }

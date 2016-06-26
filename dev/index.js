@@ -7,4 +7,5 @@ window.Vexil = Vexil
 window.onload = function () {
   let app = new Vexil(demo)
   app.mount('#app')
+  window.app = app
 }

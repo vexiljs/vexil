@@ -46,7 +46,7 @@ module.exports = {
       if (this.fontSize <= 36) {
         this.fontSize++
       } else {
-        this.fontSize = 36
+        this.fontSize = 24
       }
     }, 500)
   }
