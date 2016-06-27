@@ -1,138 +1,15 @@
-import {
-  createElement,
-  createText,
-  createComment,
-  createFragment,
-  appendChild,
-  insertBefore,
-  removeBefore,
-  createAttribute,
-  setAttribute,
-  applyAttribute,
-  VALUES,
-} from '../dom/'
 import {isArray} from '../util/'
+import createTextNode from './node/text'
+import createNode from './node/node'
+import createTemplate from './node/template'
 
 export default function render (jml, vexil, scope) {
-  let res
-  if (!jml) {
-    res = ''
-  } else if (isArray(jml)) {
-    let [node, attributes, children] = jml
-    if (node === 'template') {
-      node = createFragment(node)
-      let head = createComment('template')
-      appendChild(node, head)
-      attributes && computeAttributes(attributes, vexil, scope, (newScope, insert) => {
-        if (insert) {
-          children && insertChildrenBefore(head, children, vexil, newScope)
-        } else {
-          children && removeChildrenBefore(head, children.length)
-        }
-      })
+  if (isArray(jml)) {
+    if (jml[0] === 'template') {
+      return createTemplate(jml[0], jml[1], jml[2], vexil, scope)
     } else {
-      node = createElement(node)
-      attributes && applyAttributes(node, attributes, vexil, scope)
-      children && appendChildren(node, children, vexil, scope)
+      return createNode(jml[0], jml[1], jml[2], vexil, scope)
     }
-    return node
-  } else if (typeof jml === 'function') {
-    res = evaluate(jml, vexil, scope)
-  } else {
-    res = jml
   }
-  return createText(res)
-}
-
-function applyAttributes (node, attributes, vexil, scope) {
-  let attr
-  Object.keys(attributes).forEach(key => {
-    if (key[0] === '@') { // event
-      node.addEventListener(key.slice(1), (event) => {
-        scope.$event = event
-        evaluate(attributes[key], vexil, scope)
-      })
-    } else {
-      let val = attributes[key]
-      let prop = VALUES[key]
-      if (prop) {
-        if (typeof val === 'function') {
-          bind(val, (newVal, oldVal) => {
-            node[prop] = newVal
-          }, vexil, scope)
-        } else {
-          node[prop] = val
-        }
-      } else {
-        attr = createAttribute(key)
-        if (typeof val === 'function') {
-          bind(val, (newVal, oldVal) => {
-            setAttribute(attr, newVal)
-            applyAttribute(node, attr)
-          }, vexil, scope)
-        } else {
-          setAttribute(attr, val)
-          applyAttribute(node, attr)
-        }
-      }
-    }
-  })
-}
-
-function computeAttributes (attributes, vexil, scope, callback) {
-  let $if = attributes['*if']
-  if ($if) {
-    bind($if, (newVal, oldVal) => {
-      newVal = !!newVal
-      callback(scope, newVal)
-    }, vexil, scope)
-  }
-  // let $items = attributes['*for']
-  // if ($items) {
-  //   $items = evaluate($items, vexil, scope)
-  //   if ($items && $items.length) {
-  //     let newScope = Object.assign({}, scope)
-  //     let subKey = attributes['_forKey']
-  //     $items.forEach((v, k) => {
-  //       newScope[subKey] = v
-  //       newScope.$index = k
-  //       callback(newScope)
-  //     })
-  //   }
-  // } else {
-  //   callback(vexil, scope)
-  // }
-}
-
-function appendChildren (node, children, vexil, scope) {
-  children.forEach(child => {
-    appendChild(node, render(child, vexil, scope))
-  })
-}
-
-function insertChildrenBefore (head, children, vexil, scope) {
-  children.forEach(child => {
-    insertBefore(head, render(child, vexil, scope))
-  })
-}
-
-function removeChildrenBefore (head, length) {
-  while (length-- > 0) {
-    removeBefore(head)
-  }
-}
-
-function evaluate (func, scope, subScope) {
-  try {
-    return func(scope, subScope)
-  } catch (err) {
-    return undefined
-  }
-}
-
-const WATCH_OPTION = {deep: true, first: true}
-function bind (func, callback, scope, subScope) {
-  return scope.$ob.watch(() => {
-    return evaluate(func, scope, subScope)
-  }, callback, WATCH_OPTION).value
+  return createTextNode(jml, vexil, scope)
 }
