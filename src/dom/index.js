@@ -24,6 +24,14 @@ export function appendChild (node, child) {
   node.appendChild(child)
 }
 
+export function insertBefore (head, node) {
+  return head.parentNode.insertBefore(node, head)
+}
+
+export function removeBefore (head) {
+  return head.parentNode.removeChild(head.previousSibling)
+}
+
 export function createAttribute (attribute) {
   return DOC.createAttribute(attribute)
 }

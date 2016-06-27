@@ -1,8 +1,11 @@
 import {
   createElement,
   createText,
+  createComment,
   createFragment,
   appendChild,
+  insertBefore,
+  removeBefore,
   createAttribute,
   setAttribute,
   applyAttribute,
@@ -18,8 +21,14 @@ export default function render (jml, vexil, scope) {
     let [node, attributes, children] = jml
     if (node === 'template') {
       node = createFragment(node)
-      attributes && computeAttributes(attributes, vexil, scope, (newScope) => {
-        children && appendChildren(node, children, vexil, newScope)
+      let head = createComment('template')
+      appendChild(node, head)
+      attributes && computeAttributes(attributes, vexil, scope, (newScope, insert) => {
+        if (insert) {
+          children && insertChildrenBefore(head, children, vexil, newScope)
+        } else {
+          children && removeChildrenBefore(head, children.length)
+        }
       })
     } else {
       node = createElement(node)
@@ -48,7 +57,7 @@ function applyAttributes (node, attributes, vexil, scope) {
       let prop = VALUES[key]
       if (prop) {
         if (typeof val === 'function') {
-          node[prop] = bind(val, (newVal, oldVal) => {
+          bind(val, (newVal, oldVal) => {
             node[prop] = newVal
           }, vexil, scope)
         } else {
@@ -57,14 +66,14 @@ function applyAttributes (node, attributes, vexil, scope) {
       } else {
         attr = createAttribute(key)
         if (typeof val === 'function') {
-          setAttribute(attr, bind(val, (newVal, oldVal) => {
+          bind(val, (newVal, oldVal) => {
             setAttribute(attr, newVal)
             applyAttribute(node, attr)
-          }, vexil, scope))
+          }, vexil, scope)
         } else {
           setAttribute(attr, val)
+          applyAttribute(node, attr)
         }
-        applyAttribute(node, attr)
       }
     }
   })
@@ -73,30 +82,44 @@ function applyAttributes (node, attributes, vexil, scope) {
 function computeAttributes (attributes, vexil, scope, callback) {
   let $if = attributes['*if']
   if ($if) {
-    $if = evaluate($if, vexil, scope)
-    if (!$if) return
+    bind($if, (newVal, oldVal) => {
+      newVal = !!newVal
+      callback(scope, newVal)
+    }, vexil, scope)
   }
-  let $items = attributes['*for']
-  if ($items) {
-    $items = evaluate($items, vexil, scope)
-    if ($items && $items.length) {
-      let newScope = Object.assign({}, scope)
-      let subKey = attributes['_forKey']
-      $items.forEach((v, k) => {
-        newScope[subKey] = v
-        newScope.$index = k
-        callback(newScope)
-      })
-    }
-  } else {
-    callback(vexil, scope)
-  }
+  // let $items = attributes['*for']
+  // if ($items) {
+  //   $items = evaluate($items, vexil, scope)
+  //   if ($items && $items.length) {
+  //     let newScope = Object.assign({}, scope)
+  //     let subKey = attributes['_forKey']
+  //     $items.forEach((v, k) => {
+  //       newScope[subKey] = v
+  //       newScope.$index = k
+  //       callback(newScope)
+  //     })
+  //   }
+  // } else {
+  //   callback(vexil, scope)
+  // }
 }
 
 function appendChildren (node, children, vexil, scope) {
   children.forEach(child => {
     appendChild(node, render(child, vexil, scope))
   })
+}
+
+function insertChildrenBefore (head, children, vexil, scope) {
+  children.forEach(child => {
+    insertBefore(head, render(child, vexil, scope))
+  })
+}
+
+function removeChildrenBefore (head, length) {
+  while (length-- > 0) {
+    removeBefore(head)
+  }
 }
 
 function evaluate (func, scope, subScope) {
@@ -107,7 +130,7 @@ function evaluate (func, scope, subScope) {
   }
 }
 
-const WATCH_OPTION = {deep: true}
+const WATCH_OPTION = {deep: true, first: true}
 function bind (func, callback, scope, subScope) {
   return scope.$ob.watch(() => {
     return evaluate(func, scope, subScope)

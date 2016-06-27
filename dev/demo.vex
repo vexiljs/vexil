@@ -1,8 +1,8 @@
 <template>
 <div class="demo">
   <div class="demo-item">
-    <h1 :text="title" :style="styl"></h1>
-    <p *for="p in arr" :class="claz" :text="($index + 1) + '. ' + p"></p>
+    <h1 *if="show" :text="title" :style="styl"></h1>
+    <!--<p *for="p in arr" :class="claz" :text="($index + 1) + '. ' + p"></p>-->
   </div>
   <div class="demo-item">
     <button @click="hello($event)">hello</button>
@@ -20,6 +20,7 @@ module.exports = {
     claz: 'demo-grid',
     title: 'This is title!',
     name: 'world',
+    show: true,
   },
   computed: {
     styl1 () {
@@ -48,7 +49,8 @@ module.exports = {
       } else {
         this.fontSize = 24
       }
-    }, 500)
+      this.show = !this.show
+    }, 1000)
   }
 }
 </script>
