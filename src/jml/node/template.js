@@ -14,9 +14,7 @@ let uid = 0
 export default function createTemplate (node, attributes, children, vexil, scope) {
   uid++
   node = createFragment(node)
-  let head = createComment('template')
-  appendChild(node, head)
-  attributes && computeAttributes(attributes, vexil, scope, (newScope, insert, id) => {
+  attributes && computeAttributes(node, attributes, vexil, scope, (head, newScope, insert, id) => {
     if (insert) {
       children && insertChildrenBefore(head, children, vexil, newScope, id)
     } else {
@@ -26,12 +24,14 @@ export default function createTemplate (node, attributes, children, vexil, scope
   return node
 }
 
-function computeAttributes (attributes, vexil, scope, callback, id) {
+function computeAttributes (node, attributes, vexil, scope, callback, id) {
   let $if = attributes['*if']
   if ($if) {
+    let head = createComment('if')
+    appendChild(node, head)
     bind($if, (newVal, oldVal) => {
       newVal = Boolean(newVal)
-      callback(scope, newVal, id)
+      callback(head, scope, newVal, id)
     }, vexil, scope)
   }
   // let $items = attributes['*for']
