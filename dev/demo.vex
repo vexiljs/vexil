@@ -5,8 +5,11 @@
     <!--<p *for="p in arr" :class="claz" :text="($index + 1) + '. ' + p"></p>-->
   </div>
   <div class="demo-item">
+  <template *if="show">
+    <button @click="hello($event)">hello</button>
     <button @click="hello($event)">hello</button>
     <pre id="output"></pre>
+  </template>
   </div>
 </div>
 </template>
@@ -50,7 +53,7 @@ module.exports = {
         this.fontSize = 24
       }
       this.show = !this.show
-    }, 1000)
+    }, 2000)
   }
 }
 </script>

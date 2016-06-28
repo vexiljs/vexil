@@ -36,12 +36,20 @@ export function createAttribute (attribute) {
   return DOC.createAttribute(attribute)
 }
 
+export function getAttribute (attribute) {
+  return attribute.nodeValue
+}
+
 export function setAttribute (attribute, value) {
   attribute.nodeValue = value
 }
 
 export function applyAttribute (node, attribute) {
   node.setAttributeNode(attribute)
+}
+
+export function previousSibling (node) {
+  return node.previousSibling
 }
 
 export const VALUES = {

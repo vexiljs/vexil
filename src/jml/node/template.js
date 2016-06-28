@@ -4,30 +4,34 @@ import {
   appendChild,
   insertBefore,
   removeBefore,
+  previousSibling,
 } from '../../dom/'
 import {bind} from '../bind'
 import render from '../render'
 
+let uid = 0
+
 export default function createTemplate (node, attributes, children, vexil, scope) {
+  uid++
   node = createFragment(node)
   let head = createComment('template')
   appendChild(node, head)
-  attributes && computeAttributes(attributes, vexil, scope, (newScope, insert) => {
+  attributes && computeAttributes(attributes, vexil, scope, (newScope, insert, id) => {
     if (insert) {
-      children && insertChildrenBefore(head, children, vexil, newScope)
+      children && insertChildrenBefore(head, children, vexil, newScope, id)
     } else {
-      children && removeChildrenBefore(head, children.length)
+      children && removeChildrenBefore(head, children.length, id)
     }
-  })
+  }, uid)
   return node
 }
 
-function computeAttributes (attributes, vexil, scope, callback) {
+function computeAttributes (attributes, vexil, scope, callback, id) {
   let $if = attributes['*if']
   if ($if) {
     bind($if, (newVal, oldVal) => {
-      newVal = !!newVal
-      callback(scope, newVal)
+      newVal = Boolean(newVal)
+      callback(scope, newVal, id)
     }, vexil, scope)
   }
   // let $items = attributes['*for']
@@ -47,14 +51,21 @@ function computeAttributes (attributes, vexil, scope, callback) {
   // }
 }
 
-function insertChildrenBefore (head, children, vexil, scope) {
+function insertChildrenBefore (head, children, vexil, scope, id) {
+  let node
   children.forEach(child => {
-    insertBefore(head, render(child, vexil, scope))
+    node = render(child, vexil, scope)
+    node['uid'] = id
+    insertBefore(head, node)
   })
 }
 
-function removeChildrenBefore (head, length) {
+function removeChildrenBefore (head, length, id) {
+  let node
   while (length-- > 0) {
-    removeBefore(head)
+    node = previousSibling(head)
+    if (node['uid'] === id) {
+      removeBefore(head)
+    }
   }
 }
