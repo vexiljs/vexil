@@ -14,11 +14,18 @@ let uid = 0
 export default function createTemplate (node, attributes, children, vexil, scope) {
   uid++
   node = createFragment(node)
-  attributes && computeAttributes(node, attributes, vexil, scope, (head, newScope, insert, id) => {
+  attributes && computeAttributes(node, attributes, vexil, scope, (head, newScope, insert, id, lastLength) => {
     if (insert) {
-      children && insertChildrenBefore(head, children, vexil, newScope, id)
+      insertChildrenBefore(head, children, vexil, newScope, id)
     } else {
-      children && removeChildrenBefore(head, children.length, id)
+      let length = 0
+      if (children) {
+        length += children.length
+      }
+      if (lastLength) {
+        length += lastLength
+      }
+      children && removeChildrenBefore(head, length, id)
     }
   }, uid)
   return node
@@ -34,21 +41,27 @@ function computeAttributes (node, attributes, vexil, scope, callback, id) {
       callback(head, scope, newVal, id)
     }, vexil, scope)
   }
-  // let $items = attributes['*for']
-  // if ($items) {
-  //   $items = evaluate($items, vexil, scope)
-  //   if ($items && $items.length) {
-  //     let newScope = Object.assign({}, scope)
-  //     let subKey = attributes['_forKey']
-  //     $items.forEach((v, k) => {
-  //       newScope[subKey] = v
-  //       newScope.$index = k
-  //       callback(newScope)
-  //     })
-  //   }
-  // } else {
-  //   callback(vexil, scope)
-  // }
+  let $items = attributes['*for']
+  if ($items) {
+    let head = createComment('for')
+    appendChild(node, head)
+    let subKey = attributes['_forKey']
+    let lastLength
+    bind($items, (newVal, oldVal) => {
+      if (lastLength === undefined) {
+        lastLength = newVal.length
+      }
+      newVal.forEach(() => {
+        callback(head, null, false, id, lastLength)
+      })
+      newVal.forEach((v, k) => {
+        let newScope = Object.assign({}, scope)
+        newScope[subKey] = v
+        newScope.$index = k
+        callback(head, newScope, true, id)
+      })
+    }, vexil, scope)
+  }
 }
 
 function insertChildrenBefore (head, children, vexil, scope, id) {
@@ -64,7 +77,7 @@ function removeChildrenBefore (head, length, id) {
   let node
   while (length-- > 0) {
     node = previousSibling(head)
-    if (node['uid'] === id) {
+    if (node && node['uid'] === id) {
       removeBefore(head)
     }
   }

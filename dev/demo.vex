@@ -1,16 +1,16 @@
 <template>
 <div class="demo">
   <div class="demo-item">
-    <h1 *if="show" :text="title" :style="styl"></h1>
-    <!--<p *for="p in arr" :class="claz" :text="($index + 1) + '. ' + p"></p>-->
+    <!--<h1 *if="show" :text="title" :style="styl"></h1>-->
+    <p *for="p in arr" :class="claz" :text="($index + 1) + '. ' + p"></p>
   </div>
-  <div class="demo-item">
+  <!--<div class="demo-item">
   <template *if="show">
     <button @click="hello($event)">hello</button>
     <button @click="hello($event)">hello</button>
     <pre id="output"></pre>
   </template>
-  </div>
+  </div>-->
 </div>
 </template>
 
@@ -53,7 +53,14 @@ module.exports = {
         this.fontSize = 24
       }
       this.show = !this.show
+      // if (this.arr.length > 5) {
+      //   this.arr = [this.arr[0]]
+      // } else {
+      //   this.arr.push(this.arr[0])
+      // }
     }, 2000)
+    this.arr = [this.arr[0]]
+    this.arr.push(this.arr[0])
   }
 }
 </script>
