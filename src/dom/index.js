@@ -32,6 +32,10 @@ export function removeBefore (head) {
   return head.parentNode.removeChild(head.previousSibling)
 }
 
+export function removeNodeByHead (head, node) {
+  return head.parentNode.removeChild(node)
+}
+
 export function createAttribute (attribute) {
   return DOC.createAttribute(attribute)
 }

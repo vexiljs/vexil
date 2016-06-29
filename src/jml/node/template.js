@@ -8,13 +8,14 @@ import {
 } from '../../dom/'
 import {bind} from '../bind'
 import render from '../render'
+import vIf from './if'
 
 let uid = 0
 
 export default function createTemplate (node, attributes, children, vexil, scope) {
   uid++
   node = createFragment(node)
-  attributes && computeAttributes(node, attributes, vexil, scope, (head, newScope, insert, id, lastLength) => {
+  attributes && computeAttributes(node, attributes, children, vexil, scope, (head, newScope, insert, id, lastLength) => {
     if (insert) {
       insertChildrenBefore(head, children, vexil, newScope, id)
     } else {
@@ -31,15 +32,14 @@ export default function createTemplate (node, attributes, children, vexil, scope
   return node
 }
 
-function computeAttributes (node, attributes, vexil, scope, callback, id) {
+function computeAttributes (node, attributes, children, vexil, scope, callback, id) {
   let $if = attributes['*if']
   if ($if) {
     let head = createComment('if')
     appendChild(node, head)
-    bind($if, (newVal, oldVal) => {
-      newVal = Boolean(newVal)
-      callback(head, scope, newVal, id)
-    }, vexil, scope)
+    bind($if, vIf(
+      head, children, vexil, scope, uid
+    ).update, vexil, scope)
   }
   let $items = attributes['*for']
   if ($items) {
