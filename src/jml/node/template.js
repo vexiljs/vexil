@@ -9,6 +9,7 @@ import {
 import {bind} from '../bind'
 import render from '../render'
 import vIf from './if'
+import vFor from './for'
 
 let uid = 0
 
@@ -38,29 +39,16 @@ function computeAttributes (node, attributes, children, vexil, scope, callback, 
     let head = createComment('if')
     appendChild(node, head)
     bind($if, vIf(
-      head, children, vexil, scope, uid
+      head, attributes, children, vexil, scope, uid
     ).update, vexil, scope)
   }
-  let $items = attributes['*for']
-  if ($items) {
+  let $for = attributes['*for']
+  if ($for) {
     let head = createComment('for')
     appendChild(node, head)
-    let subKey = attributes['_forKey']
-    let lastLength
-    bind($items, (newVal, oldVal) => {
-      if (lastLength === undefined) {
-        lastLength = newVal.length
-      }
-      newVal.forEach(() => {
-        callback(head, null, false, id, lastLength)
-      })
-      newVal.forEach((v, k) => {
-        let newScope = Object.assign({}, scope)
-        newScope[subKey] = v
-        newScope.$index = k
-        callback(head, newScope, true, id)
-      })
-    }, vexil, scope)
+    bind($for, vFor(
+      head, attributes, children, vexil, scope, uid
+    ).update, vexil, scope)
   }
 }
 

@@ -4,7 +4,7 @@ import {
 } from '../../dom/'
 import render from '../render'
 
-export default function vIf (head, children, vexil, scope, uid) {
+export default function vIf (head, attributes, children, vexil, scope, uid) {
   let nodes
   function update (newVal, oldVal) {
     newVal = Boolean(newVal)
