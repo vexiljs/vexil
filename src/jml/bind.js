@@ -1,4 +1,4 @@
-const WATCH_OPTION = {deep: true, first: true}
+const WATCH_OPTION = {deep: true}
 
 export function bind (func, callback, scope, subScope) {
   return scope.$ob.watch(() => {

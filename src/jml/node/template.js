@@ -38,17 +38,21 @@ function computeAttributes (node, attributes, children, vexil, scope, callback, 
   if ($if) {
     let head = createComment('if')
     appendChild(node, head)
-    bind($if, vIf(
+    let vNode = vIf(
       head, attributes, children, vexil, scope, uid
-    ).update, vexil, scope)
+    )
+    let val = bind($if, vNode.update, vexil, scope)
+    vNode.update(val)
   }
   let $for = attributes['*for']
   if ($for) {
     let head = createComment('for')
     appendChild(node, head)
-    bind($for, vFor(
+    let vNode = vFor(
       head, attributes, children, vexil, scope, uid
-    ).update, vexil, scope)
+    )
+    let val = bind($for, vNode.update, vexil, scope)
+    vNode.update(val)
   }
 }
 

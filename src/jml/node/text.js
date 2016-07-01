@@ -9,11 +9,10 @@ import {
 export default function createTextNode (text, vexil, scope) {
   let node = createText('')
   if (typeof text === 'function') {
-    bind(text, (newVal, oldVal) => {
+    let text = bind(text, (newVal, oldVal) => {
       setAttribute(node, newVal)
     })
-  } else {
-    setAttribute(node, text)
   }
+  setAttribute(node, text)
   return node
 }

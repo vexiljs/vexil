@@ -32,23 +32,21 @@ function applyAttributes (node, attributes, vexil, scope) {
       let prop = VALUES[key]
       if (prop) {
         if (typeof val === 'function') {
-          bind(val, (newVal, oldVal) => {
+          val = bind(val, (newVal, oldVal) => {
             node[prop] = newVal
           }, vexil, scope)
-        } else {
-          node[prop] = val
         }
+        node[prop] = val
       } else {
         attr = createAttribute(key)
         if (typeof val === 'function') {
-          bind(val, (newVal, oldVal) => {
+          val = bind(val, (newVal, oldVal) => {
             setAttribute(attr, newVal)
             applyAttribute(node, attr)
           }, vexil, scope)
-        } else {
-          setAttribute(attr, val)
-          applyAttribute(node, attr)
         }
+        setAttribute(attr, val)
+        applyAttribute(node, attr)
       }
     }
   })
