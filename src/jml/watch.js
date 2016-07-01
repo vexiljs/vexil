@@ -1,12 +1,12 @@
 const WATCH_OPTION = {deep: true}
 
-export function bind (func, callback, scope, subScope) {
+export default function watch (func, callback, scope, subScope) {
   return scope.$ob.watch(() => {
     return evaluate(func, scope, subScope)
-  }, callback, WATCH_OPTION).value
+  }, callback, WATCH_OPTION)
 }
 
-export function evaluate (func, scope, subScope) {
+function evaluate (func, scope, subScope) {
   try {
     return func(scope, subScope)
   } catch (err) {

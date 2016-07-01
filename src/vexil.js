@@ -18,7 +18,7 @@ export default class Vexil {
     this.$created && this.$created()
   }
   render () {
-    this.$dom = render(this)
+    this.$dom = render(this).node
   }
   mount (selector) {
     this.$domRoot = query(selector)
