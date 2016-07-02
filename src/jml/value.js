@@ -1,10 +1,11 @@
 import watch from './watch'
+import {isFun} from '../util/'
 
 export default class VValue {
   constructor (node, property, value, vexil, scope) {
     this.node = node
     this.property = property
-    if (typeof value === 'function') {
+    if (isFun(value)) {
       this.watcher = watch(value, this.update.bind(this), vexil, scope)
       this.update(this.watcher.value)
       this.remove = function remove () {

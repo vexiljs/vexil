@@ -4,12 +4,13 @@ import {
   applyAttribute,
 } from '../dom/'
 import watch from './watch'
+import {isFun} from '../util/'
 
 export default class VAttribute {
   constructor (node, attribute, value, vexil, scope) {
     this.attribute = createAttribute(attribute)
     applyAttribute(node, this.attribute)
-    if (typeof value === 'function') {
+    if (isFun(value)) {
       this.watcher = watch(value, this.update.bind(this), vexil, scope)
       this.update(this.watcher.value)
       this.remove = function remove () {

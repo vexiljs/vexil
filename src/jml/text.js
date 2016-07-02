@@ -3,10 +3,11 @@ import {
   setAttribute,
 } from '../dom/'
 import watch from './watch'
+import {isFun} from '../util/'
 
 export default class VText {
   constructor (text, vexil, scope) {
-    if (typeof text === 'function') {
+    if (isFun(text)) {
       this.watcher = watch(text, this.update.bind(this), vexil, scope)
       text = this.watcher.value
       this.remove = function remove () {
