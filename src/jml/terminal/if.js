@@ -20,6 +20,7 @@ export default class VIf {
     this.uid = uid
     this.watcher = watch(this.value, this.update.bind(this), vexil)
     this.vNodes = null
+    this.show = false
     this.update(this.watcher.value)
   }
   update (newVal) {
@@ -36,13 +37,18 @@ export default class VIf {
         vNode.bind()
         insertBefore(this.head, vNode.node)
       })
+      this.show = true
     } else {
+      if (!this.show) {
+        return
+      }
       if (this.vNodes) {
         this.vNodes.forEach(vNode => {
           removeNodeByHead(this.head, vNode.node)
           vNode.unbind()
         })
       }
+      this.show = false
     }
   }
   bind () {
