@@ -8,10 +8,10 @@ export default class VProperty {
     if (isFun(value)) {
       this.watcher = watch(value, this.update.bind(this), vexil)
       this.update(this.watcher.value)
-      this.remove = function remove () {
+      this.unbind = function unbind () {
         this.watcher.active = false
       }
-      this.recover = function recover () {
+      this.bind = function bind () {
         this.watcher.active = true
         this.watcher.run()
       }

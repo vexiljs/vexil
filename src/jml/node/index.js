@@ -13,7 +13,6 @@ export default class VNode {
     this.node = createElement(jmlNode[0])
     this.watchers = []
     this.attributes = jmlNode[1]
-    this.instance = []
     if (this.attributes) {
       Object.keys(this.attributes).forEach(key => {
         if (key[0] === '@') { // event
@@ -26,7 +25,7 @@ export default class VNode {
           } else { // attribute
             vAttribute = new VAttribute(this.node, key, val, vexil)
           }
-          if (vAttribute.remove) {
+          if (vAttribute.unbind) {
             this.watchers.push(vAttribute)
           }
         }
@@ -38,21 +37,30 @@ export default class VNode {
       this.children.forEach(child => {
         vNode = render(child, vexil)
         appendChild(this.node, vNode.node)
-        if (vNode.remove) {
+        if (vNode.unbind) {
           this.watchers.push(vNode)
         }
       })
     }
+    this.binded = true
   }
-  remove () {
+  unbind () {
+    if (!this.binded) {
+      return
+    }
     this.watchers.forEach(v => {
-      v.remove && v.remove()
+      v.unbind && v.unbind()
     })
+    this.binded = false
   }
-  recover () {
+  bind () {
+    if (this.binded) {
+      return
+    }
     this.watchers.forEach(v => {
-      v.recover && v.recover()
+      v.bind && v.bind()
     })
+    this.binded = true
   }
   destroy () {
     this.watchers.forEach(v => {

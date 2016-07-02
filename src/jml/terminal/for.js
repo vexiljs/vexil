@@ -47,13 +47,13 @@ export default class VFor {
     })
     this.vexil._scope = this.scope
   }
-  remove () {
-    this.watcher.active = false
-    this.update(null)
-  }
-  recover () {
+  bind () {
     this.watcher.active = true
     this.watcher.run()
+  }
+  unbind () {
+    this.watcher.active = false
+    this.update(null)
   }
   destroy () {
     this.update(null)

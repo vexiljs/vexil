@@ -8,37 +8,43 @@ export default class vTerminal {
   constructor (jmlNode, vexil) {
     this.uid = uid++
     this.node = createFragment()
-    this.watchers = null
+    this.watchers = []
     let attributes = jmlNode[1]
     if (attributes) {
-      this.watchers = []
       if (attributes['*if']) {
         this.watchers.push(new VIf(this.node, jmlNode, vexil, uid))
       }
       if (attributes['*for']) {
         this.watchers.push(new VFor(this.node, jmlNode, vexil, uid))
       }
-      this.remove = function remove () {
-        this.watchers.forEach(v => {
-          if (v.remove) {
-            v.remove()
-          }
-        })
-      }
-      this.recover = function recover () {
-        this.watchers.forEach(v => {
-          if (v.recover) {
-            v.recover()
-          }
-        })
-      }
     }
+    this.binded = true
+  }
+  bind () {
+    if (this.binded) {
+      return
+    }
+    this.watchers.forEach(v => {
+      if (v.bind) {
+        v.bind()
+      }
+    })
+    this.binded = true
+  }
+  unbind () {
+    if (!this.binded) {
+      return
+    }
+    this.watchers.forEach(v => {
+      if (v.unbind) {
+        v.unbind()
+      }
+    })
+    this.binded = false
   }
   destroy () {
-    if (this.watchers) {
-      this.watchers.forEach(v => {
-        v.destroy && v.destroy()
-      })
-    }
+    this.watchers.forEach(v => {
+      v.destroy()
+    })
   }
 }

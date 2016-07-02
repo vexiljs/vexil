@@ -33,29 +33,25 @@ export default class VIf {
         })
       }
       this.vNodes.forEach(vNode => {
-        if (vNode.recover) {
-          vNode.recover()
-        }
+        vNode.bind()
         insertBefore(this.head, vNode.node)
       })
     } else {
       if (this.vNodes) {
         this.vNodes.forEach(vNode => {
           removeNodeByHead(this.head, vNode.node)
-          if (vNode.remove) {
-            vNode.remove()
-          }
+          vNode.unbind()
         })
       }
     }
   }
-  remove () {
-    this.watcher.active = false
-    this.update(false)
-  }
-  recover () {
+  bind () {
     this.watcher.active = true
     this.watcher.run()
+  }
+  unbind () {
+    this.watcher.active = false
+    this.update(false)
   }
   destroy () {
     this.update(false)
