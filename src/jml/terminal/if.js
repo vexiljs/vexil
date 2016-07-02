@@ -1,53 +1,66 @@
 import render from '../render'
 import {
-  appendChild,
   removeChildByParent,
   insertBefore,
   removeNodeByHead,
-  createComment,
 } from '../../dom/'
 import watch from '../watch'
 
 export default class VIf {
-  constructor (node, jmlNode, vexil, uid) {
-    this.head = createComment('if')
-    appendChild(node, this.head)
-    this.node = node
+  constructor (jmlNode, vexil) {
     this.vexil = vexil
     this.children = jmlNode[2]
     this.attributes = jmlNode[1]
     this.value = this.attributes['*if']
-    this.uid = uid
-    this.watcher = watch(this.value, this.update.bind(this), vexil)
     this.vNodes = null
     this.show = false
+  }
+  init () {
+    this.watcher = watch(this.value, this.update.bind(this), this.vexil)
     this.update(this.watcher.value)
   }
   update (newVal) {
     if (newVal) {
-      if (!this.vNodes) {
-        let vNode
-        this.vNodes = this.children.map(child => {
-          vNode = render(child, this.vexil)
-          vNode['uid'] = this.uid
-          return vNode
-        })
+      if (!this.insert) {
+        if (this.next) {
+          this.next.init()
+          this.insert = () => {
+            this.next.insert()
+          }
+          this.remove = () => {
+            this.next.remove()
+          }
+        } else {
+          if (!this.vNodes) {
+            let vNode
+            this.vNodes = this.children.map(child => {
+              vNode = render(child, this.vexil)
+              return vNode
+            })
+          }
+          this.insert = () => {
+            this.vNodes.forEach(vNode => {
+              vNode.bind()
+              insertBefore(this.head, vNode.node)
+            })
+          }
+          this.remove = () => {
+            if (this.vNodes) {
+              this.vNodes.forEach(vNode => {
+                removeNodeByHead(this.head, vNode.node)
+                vNode.unbind()
+              })
+            }
+          }
+        }
       }
-      this.vNodes.forEach(vNode => {
-        vNode.bind()
-        insertBefore(this.head, vNode.node)
-      })
+      this.insert()
       this.show = true
     } else {
       if (!this.show) {
         return
       }
-      if (this.vNodes) {
-        this.vNodes.forEach(vNode => {
-          removeNodeByHead(this.head, vNode.node)
-          vNode.unbind()
-        })
-      }
+      this.remove()
       this.show = false
     }
   }

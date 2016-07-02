@@ -1,25 +1,21 @@
 import render from '../render'
 import {
-  appendChild,
   insertBefore,
   removeNodeByHead,
-  createComment,
 } from '../../dom/'
 import watch from '../watch'
 
 export default class VFor {
-  constructor (node, jmlNode, vexil, uid) {
-    this.head = createComment('for')
-    appendChild(node, this.head)
-    this.node = node
+  constructor (jmlNode, vexil) {
     this.vexil = vexil
     this.scope = vexil._scope
     this.variable = jmlNode[1]['_forKey']
     this.value = jmlNode[1]['*for']
     this.child = jmlNode[2][0]
-    this.uid = uid
-    this.watcher = watch(this.value, this.update.bind(this), vexil)
     this.vNodes = null
+  }
+  init () {
+    this.watcher = watch(this.value, this.update.bind(this), this.vexil)
     this.update(this.watcher.value)
   }
   update (array) {
@@ -41,7 +37,6 @@ export default class VFor {
       newScope[this.variable] = v
       newScope.$index = k
       let vNode = render(this.child, this.vexil)
-      vNode.uid = this.uid
       insertBefore(this.head, vNode.node)
       this.vNodes.push(vNode)
     })
@@ -54,6 +49,12 @@ export default class VFor {
   unbind () {
     this.watcher.active = false
     this.update(null)
+  }
+  insert () {
+    this.bind()
+  }
+  remove () {
+    this.unbind()
   }
   destroy () {
     this.update(null)

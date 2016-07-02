@@ -9,9 +9,12 @@ import {
 } from '../../dom/'
 import {PROPERTIES} from '../../dom/constant'
 
+let uid = 0
+
 export default class VNode extends VN {
   constructor (jmlNode, vexil) {
     super()
+    this.uid = uid++
     this.node = createElement(jmlNode[0])
     this.attributes = jmlNode[1]
     if (this.attributes) {
