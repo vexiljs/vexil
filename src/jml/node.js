@@ -4,7 +4,7 @@ import {
   VALUES,
 } from '../dom/'
 import render from './render'
-import {evaluate} from './watch'
+import vEvent from './event'
 import VValue from './value'
 import VAttribute from './attribute'
 
@@ -14,14 +14,10 @@ export default class VNode {
     this.watchers = []
     this.attributes = jmlNode[1]
     this.instance = []
-    this.vexil = vexil
     if (this.attributes) {
       Object.keys(this.attributes).forEach(key => {
         if (key[0] === '@') { // event
-          this.node.addEventListener(key.slice(1), event => {
-            this.vexil._scope.$event = event
-            evaluate(this.attributes[key], this.vexil)
-          })
+          vEvent(this.node, key.slice(1), this.attributes[key], vexil)
         } else {
           let val = this.attributes[key]
           let vAttribute = VALUES[key]
