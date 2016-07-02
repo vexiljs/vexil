@@ -1,14 +1,14 @@
 const WATCH_OPTION = {deep: true}
 
-export default function watch (func, callback, scope, subScope) {
-  return scope.$ob.watch(() => {
-    return evaluate(func, scope, subScope)
+export default function watch (func, callback, vexil) {
+  return vexil.$ob.watch(() => {
+    return evaluate(func, vexil)
   }, callback, WATCH_OPTION)
 }
 
-function evaluate (func, scope, subScope) {
+export function evaluate (func, vexil) {
   try {
-    return func(scope, subScope)
+    return func(vexil, vexil._scope)
   } catch (err) {
     return undefined
   }

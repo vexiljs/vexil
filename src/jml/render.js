@@ -4,13 +4,13 @@ import VText from './text'
 import VNode from './node'
 import VTerminal from './terminal'
 
-export default function render (jml, vexil, scope) {
+export default function render (jml, vexil) {
   if (isArray(jml)) {
     if (jml[0] === 'template') {
-      return new VTerminal(jml, vexil, scope)
+      return new VTerminal(jml, vexil)
     } else {
-      return new VNode(jml, vexil, scope)
+      return new VNode(jml, vexil)
     }
   }
-  return new VText(jml, vexil, scope)
+  return new VText(jml, vexil)
 }

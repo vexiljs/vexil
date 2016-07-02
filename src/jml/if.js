@@ -9,17 +9,16 @@ import render from './render'
 import watch from './watch'
 
 export default class VIf {
-  constructor (node, jmlNode, vexil, scope, uid) {
+  constructor (node, jmlNode, vexil, uid) {
     this.head = createComment('if')
     appendChild(node, this.head)
     this.node = node
     this.vexil = vexil
-    this.scope = scope
     this.children = jmlNode[2]
     this.attributes = jmlNode[1]
     this.value = this.attributes['*if']
     this.uid = uid
-    this.watcher = watch(this.value, this.update.bind(this), vexil, scope)
+    this.watcher = watch(this.value, this.update.bind(this), vexil)
     this.vNodes = null
     this.update(this.watcher.value)
   }
@@ -28,7 +27,7 @@ export default class VIf {
       if (!this.vNodes) {
         let vNode
         this.vNodes = this.children.map(child => {
-          vNode = render(child, this.vexil, this.scope)
+          vNode = render(child, this.vexil)
           vNode['uid'] = this.uid
           return vNode
         })

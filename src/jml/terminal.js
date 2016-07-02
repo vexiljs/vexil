@@ -5,7 +5,7 @@ import VFor from './for'
 let uid = 1
 
 export default class vTerminal {
-  constructor (jmlNode, vexil, scope) {
+  constructor (jmlNode, vexil) {
     this.uid = uid++
     this.node = createFragment()
     this.watchers = null
@@ -13,10 +13,10 @@ export default class vTerminal {
     if (attributes) {
       this.watchers = []
       if (attributes['*if']) {
-        this.watchers.push(new VIf(this.node, jmlNode, vexil, scope, uid))
+        this.watchers.push(new VIf(this.node, jmlNode, vexil, uid))
       }
       if (attributes['*for']) {
-        this.watchers.push(new VFor(this.node, jmlNode, vexil, scope, uid))
+        this.watchers.push(new VFor(this.node, jmlNode, vexil, uid))
       }
       this.remove = function remove () {
         this.watchers.forEach(v => {

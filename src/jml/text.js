@@ -6,9 +6,9 @@ import watch from './watch'
 import {isFun} from '../util/'
 
 export default class VText {
-  constructor (text, vexil, scope) {
+  constructor (text, vexil) {
     if (isFun(text)) {
-      this.watcher = watch(text, this.update.bind(this), vexil, scope)
+      this.watcher = watch(text, this.update.bind(this), vexil)
       text = this.watcher.value
       this.remove = function remove () {
         this.watcher.active = false

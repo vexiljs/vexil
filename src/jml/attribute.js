@@ -7,11 +7,11 @@ import watch from './watch'
 import {isFun} from '../util/'
 
 export default class VAttribute {
-  constructor (node, attribute, value, vexil, scope) {
+  constructor (node, attribute, value, vexil) {
     this.attribute = createAttribute(attribute)
     applyAttribute(node, this.attribute)
     if (isFun(value)) {
-      this.watcher = watch(value, this.update.bind(this), vexil, scope)
+      this.watcher = watch(value, this.update.bind(this), vexil)
       this.update(this.watcher.value)
       this.remove = function remove () {
         this.watcher.active = false
