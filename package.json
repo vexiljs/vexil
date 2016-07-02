@@ -51,6 +51,6 @@
     "webpack-dev-server": "^1.14.1"
   },
   "dependencies": {
-    "ob.js": "^0.1.4"
+    "ob.js": "^0.1.5"
   }
 }
