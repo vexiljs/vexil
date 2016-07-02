@@ -1,4 +1,4 @@
-const DOC = window.document
+import {DOC} from './constant'
 
 export function query (selector) {
   return DOC.querySelector(selector)
@@ -58,12 +58,4 @@ export function applyAttribute (node, attribute) {
 
 export function previousSibling (node) {
   return node.previousSibling
-}
-
-export const VALUES = {
-  text: 'textContent',
-  textContent: 'textContent',
-  innerText: 'innerText',
-  html: 'innerHTML',
-  innerHTML: 'innerHTML',
 }

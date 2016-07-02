@@ -1,11 +1,11 @@
+import render from '../render'
 import {
   appendChild,
   insertBefore,
   removeNodeByHead,
   createComment,
-} from '../dom/'
-import render from './render'
-import watch from './watch'
+} from '../../dom/'
+import watch from '../watch'
 
 export default class VFor {
   constructor (node, jmlNode, vexil, uid) {

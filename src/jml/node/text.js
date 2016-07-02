@@ -1,9 +1,9 @@
 import {
   createText,
   setAttribute,
-} from '../dom/'
-import watch from './watch'
-import {isFun} from '../util/'
+} from '../../dom/'
+import watch from '../watch'
+import {isFun} from '../../util/'
 
 export default class VText {
   constructor (text, vexil) {

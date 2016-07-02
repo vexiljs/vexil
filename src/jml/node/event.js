@@ -1,5 +1,5 @@
-import {evaluate} from './watch'
-import {listen} from '../dom/event'
+import {listen} from '../../dom/event'
+import {evaluate} from '../watch'
 
 export default function vEvent (node, name, callback, vexil) {
   listen(node, name, event => {

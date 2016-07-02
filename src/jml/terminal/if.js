@@ -1,12 +1,12 @@
+import render from '../render'
 import {
   appendChild,
   removeChildByParent,
   insertBefore,
   removeNodeByHead,
   createComment,
-} from '../dom/'
-import render from './render'
-import watch from './watch'
+} from '../../dom/'
+import watch from '../watch'
 
 export default class VIf {
   constructor (node, jmlNode, vexil, uid) {

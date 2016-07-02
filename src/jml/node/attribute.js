@@ -1,10 +1,15 @@
-import watch from './watch'
-import {isFun} from '../util/'
+import {
+  createAttribute,
+  setAttribute,
+  applyAttribute,
+} from '../../dom/'
+import watch from '../watch'
+import {isFun} from '../../util/'
 
-export default class VValue {
-  constructor (node, property, value, vexil) {
-    this.node = node
-    this.property = property
+export default class VAttribute {
+  constructor (node, attribute, value, vexil) {
+    this.attribute = createAttribute(attribute)
+    applyAttribute(node, this.attribute)
     if (isFun(value)) {
       this.watcher = watch(value, this.update.bind(this), vexil)
       this.update(this.watcher.value)
@@ -20,7 +25,7 @@ export default class VValue {
     }
   }
   update (value) {
-    this.node[this.property] = value
+    setAttribute(this.attribute, value)
   }
   destroy () {
     this.watcher && this.watcher.teardown()

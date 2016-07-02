@@ -43,10 +43,10 @@ module.exports = {
       output.innerText += '\n' + text
     },
   },
-  created () {
+  create () {
     this.name = 'Vexil'
   },
-  mounted () {
+  mount () {
     setInterval(() => {
       if (this.fontSize <= 36) {
         this.fontSize++

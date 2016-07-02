@@ -1,12 +1,12 @@
+import render from '../render'
+import vEvent from './event'
+import VProperty from './property'
+import VAttribute from './attribute'
 import {
   createElement,
   appendChild,
-  VALUES,
-} from '../dom/'
-import render from './render'
-import vEvent from './event'
-import VValue from './value'
-import VAttribute from './attribute'
+} from '../../dom/'
+import {PROPERTIES} from '../../dom/constant'
 
 export default class VNode {
   constructor (jmlNode, vexil) {
@@ -20,9 +20,9 @@ export default class VNode {
           vEvent(this.node, key.slice(1), this.attributes[key], vexil)
         } else {
           let val = this.attributes[key]
-          let vAttribute = VALUES[key]
+          let vAttribute = PROPERTIES[key]
           if (vAttribute) { // value
-            vAttribute = new VValue(this.node, vAttribute, val, vexil)
+            vAttribute = new VProperty(this.node, vAttribute, val, vexil)
           } else { // attribute
             vAttribute = new VAttribute(this.node, key, val, vexil)
           }

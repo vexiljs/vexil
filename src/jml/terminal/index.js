@@ -1,6 +1,6 @@
-import {createFragment} from '../dom/'
 import VIf from './if'
 import VFor from './for'
+import {createFragment} from '../../dom/'
 
 let uid = 1
 

@@ -1,8 +1,7 @@
+import VNode from './node/'
+import VTerminal from './terminal/'
+import VText from './node/text'
 import {isArray} from '../util/'
-
-import VText from './text'
-import VNode from './node'
-import VTerminal from './terminal'
 
 export default function render (jml, vexil) {
   if (isArray(jml)) {
