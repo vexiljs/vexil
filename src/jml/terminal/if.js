@@ -1,23 +1,15 @@
+import VDirective from './directive'
 import render from '../render'
 import {
-  removeChildByParent,
   insertBefore,
   removeNodeByHead,
 } from '../../dom/'
-import watch from '../watch'
 
-export default class VIf {
-  constructor (jmlNode, vexil) {
-    this.vexil = vexil
-    this.children = jmlNode[2]
-    this.attributes = jmlNode[1]
+export default class VIf extends VDirective {
+  constructor (...args) {
+    super(...args)
     this.value = this.attributes['*if']
-    this.vNodes = null
     this.show = false
-  }
-  init () {
-    this.watcher = watch(this.value, this.update.bind(this), this.vexil)
-    this.update(this.watcher.value)
   }
   update (newVal) {
     if (newVal) {
@@ -63,18 +55,5 @@ export default class VIf {
       this.remove()
       this.show = false
     }
-  }
-  bind () {
-    this.watcher.active = true
-    this.watcher.run()
-  }
-  unbind () {
-    this.watcher.active = false
-    this.update(false)
-  }
-  destroy () {
-    this.update(false)
-    this.watcher.teardown()
-    removeChildByParent(this.head)
   }
 }

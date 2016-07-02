@@ -1,22 +1,17 @@
+import VDirective from './directive'
 import render from '../render'
 import {
   insertBefore,
   removeNodeByHead,
 } from '../../dom/'
-import watch from '../watch'
 
-export default class VFor {
-  constructor (jmlNode, vexil) {
-    this.vexil = vexil
-    this.scope = vexil._scope
-    this.variable = jmlNode[1]['_forKey']
-    this.value = jmlNode[1]['*for']
-    this.child = jmlNode[2][0]
-    this.vNodes = null
-  }
-  init () {
-    this.watcher = watch(this.value, this.update.bind(this), this.vexil)
-    this.update(this.watcher.value)
+export default class VFor extends VDirective {
+  constructor (...args) {
+    super(...args)
+    this.value = this.attributes['*for']
+    this.scope = this.vexil._scope
+    this.variable = this.attributes['_forKey']
+    this.child = this.children[0]
   }
   update (array) {
     if (this.vNodes) {
@@ -42,22 +37,10 @@ export default class VFor {
     })
     this.vexil._scope = this.scope
   }
-  bind () {
-    this.watcher.active = true
-    this.watcher.run()
-  }
-  unbind () {
-    this.watcher.active = false
-    this.update(null)
-  }
   insert () {
     this.bind()
   }
   remove () {
     this.unbind()
-  }
-  destroy () {
-    this.update(null)
-    this.watcher.teardown()
   }
 }
