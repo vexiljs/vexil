@@ -1,14 +1,15 @@
+import VN from '../vn'
 import VIf from './if'
 import VFor from './for'
 import {createFragment} from '../../dom/'
 
 let uid = 1
 
-export default class vTerminal {
+export default class vTerminal extends VN {
   constructor (jmlNode, vexil) {
+    super()
     this.uid = uid++
     this.node = createFragment()
-    this.watchers = []
     let attributes = jmlNode[1]
     if (attributes) {
       if (attributes['*if']) {
@@ -18,33 +19,5 @@ export default class vTerminal {
         this.watchers.push(new VFor(this.node, jmlNode, vexil, uid))
       }
     }
-    this.binded = true
-  }
-  bind () {
-    if (this.binded) {
-      return
-    }
-    this.watchers.forEach(v => {
-      if (v.bind) {
-        v.bind()
-      }
-    })
-    this.binded = true
-  }
-  unbind () {
-    if (!this.binded) {
-      return
-    }
-    this.watchers.forEach(v => {
-      if (v.unbind) {
-        v.unbind()
-      }
-    })
-    this.binded = false
-  }
-  destroy () {
-    this.watchers.forEach(v => {
-      v.destroy()
-    })
   }
 }

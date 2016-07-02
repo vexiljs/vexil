@@ -1,3 +1,4 @@
+import VN from '../vn'
 import render from '../render'
 import vEvent from './event'
 import VProperty from './property'
@@ -8,10 +9,10 @@ import {
 } from '../../dom/'
 import {PROPERTIES} from '../../dom/constant'
 
-export default class VNode {
+export default class VNode extends VN {
   constructor (jmlNode, vexil) {
+    super()
     this.node = createElement(jmlNode[0])
-    this.watchers = []
     this.attributes = jmlNode[1]
     if (this.attributes) {
       Object.keys(this.attributes).forEach(key => {
@@ -42,29 +43,5 @@ export default class VNode {
         }
       })
     }
-    this.binded = true
-  }
-  unbind () {
-    if (!this.binded) {
-      return
-    }
-    this.watchers.forEach(v => {
-      v.unbind && v.unbind()
-    })
-    this.binded = false
-  }
-  bind () {
-    if (this.binded) {
-      return
-    }
-    this.watchers.forEach(v => {
-      v.bind && v.bind()
-    })
-    this.binded = true
-  }
-  destroy () {
-    this.watchers.forEach(v => {
-      v.destroy()
-    })
   }
 }
