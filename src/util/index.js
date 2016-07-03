@@ -19,6 +19,17 @@ export function isFun (fun) {
 }
 
 /**
+ * String type check.
+ *
+ * @param {*} str
+ * @return {Boolean}
+ */
+
+export function isStr (fun) {
+  return typeof fun === 'string'
+}
+
+/**
  * Define a property.
  *
  * @param {Object} object
