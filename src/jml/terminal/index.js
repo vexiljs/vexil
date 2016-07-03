@@ -46,13 +46,17 @@ function generate (terminal) {
 
 function $generate (terminal, before) {
   let key = DIRCTIVE_KEYS[index]
+  if (!key) {
+    return
+  }
+  let v
   if (terminal.attributes[key]) {
-    let v = new DIRCTIVES[key](terminal)
+    v = new DIRCTIVES[key](terminal)
     if (before) {
       v.before = before
       before.next = v
     }
-    index++
-    $generate(terminal, v)
   }
+  index++
+  $generate(terminal, v)
 }
