@@ -1,18 +1,20 @@
 import VN from '../vn'
 import VIf from './if'
 import VFor from './for'
+import VComponent from './component'
 import {createFragment} from '../../dom/'
 
 const DIRCTIVES = {
   '*if': VIf,
   '*for': VFor,
+  'component': VComponent,
 }
 const DIRCTIVE_KEYS = Object.keys(DIRCTIVES)
 
 export const DIRCTIVE_HEADS = {}
 DIRCTIVE_KEYS.forEach(key => {
   let name = DIRCTIVES[key].name
-  DIRCTIVE_HEADS[name] = key.slice(1)
+  DIRCTIVE_HEADS[name] = key.replace('*', '')
 })
 
 let uid = 1
@@ -58,5 +60,5 @@ function $generate (terminal, before) {
     }
   }
   index++
-  $generate(terminal, v)
+  $generate(terminal, v || before)
 }

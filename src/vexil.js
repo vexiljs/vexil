@@ -4,12 +4,14 @@ import {
   appendChild,
 } from './dom/'
 import ob from 'ob.js'
+import {isStr} from './util/'
 
 export default class Vexil {
   constructor (vexil) {
     this.$jml = vexil.$jml
     this.$create = vexil.create
     this.$mount = vexil.mount
+    this.$components = vexil.components || {}
 
     this.$ob = ob(this).reactive(vexil)
 
@@ -21,7 +23,10 @@ export default class Vexil {
     this.$dom = render(this).node
   }
   mount (selector) {
-    this.$selector = query(selector)
+    if (isStr(selector)) {
+      selector = query(selector)
+    }
+    this.$selector = selector
     appendChild(this.$selector, this.$dom)
 
     this.$mount && this.$mount()
