@@ -12,8 +12,8 @@ export default class VDirective {
     name = DIRCTIVE_HEADS[name]
     this.head = createComment(name)
     appendChild(terminal.node, this.head)
-    this.attributes = terminal.jmlNode[1]
-    this.children = terminal.jmlNode[2]
+    this.attributes = terminal.attributes
+    this.children = terminal.children
     this.vexil = terminal.vexil
     this.vNodes = null
     terminal.watchers.push(this)

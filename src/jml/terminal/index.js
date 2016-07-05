@@ -17,17 +17,11 @@ DIRCTIVE_KEYS.forEach(key => {
   DIRCTIVE_HEADS[name] = key.replace('*', '')
 })
 
-let uid = 1
-
 export default class VTerminal extends VN {
-  constructor (jmlNode, vexil) {
-    super()
-    this.uid = uid++
+  constructor (...args) {
+    super(...args)
     this.node = createFragment()
-    this.attributes = jmlNode[1]
     if (this.attributes) {
-      this.jmlNode = jmlNode
-      this.vexil = vexil
       generate(this)
     }
   }
