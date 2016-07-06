@@ -7,6 +7,16 @@ import watch from '../watch'
 import {isFun} from '../../util/'
 
 export default class VAttribute {
+
+  /**
+   * class VAttribute
+   *
+   * @param {Element} node
+   * @param {String} attribute
+   * @param {Function} value
+   * @param {Vexil} vexil
+   */
+
   constructor (node, attribute, value, vexil) {
     this.attribute = createAttribute(attribute)
     applyAttribute(node, this.attribute)
@@ -24,9 +34,21 @@ export default class VAttribute {
       this.update(value)
     }
   }
+
+  /**
+   * method update
+   *
+   * @param {*} value
+   */
+
   update (value) {
     setAttribute(this.attribute, value)
   }
+
+  /**
+   * method destroy
+   */
+
   destroy () {
     this.watcher && this.watcher.teardown()
   }

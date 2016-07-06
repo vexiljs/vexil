@@ -1,14 +1,14 @@
-/**
- * class Event
- *
- * @param {Object} owner
- * @param {Event} [parent]
- * @returns {Event}
- */
-
 let uid = 0
 
 export default class Event {
+
+  /**
+   * class Event
+   *
+   * @param {Object} owner
+   * @param {Event} [parent]
+   */
+
   constructor (owner, parent) {
     this.uid = uid++
     this.owner = owner
@@ -23,6 +23,14 @@ export default class Event {
     this.children = []
     this.subscribers = {}
   }
+
+  /**
+   * method on
+   *
+   * @param {String} event
+   * @param {Function} callback
+   */
+
   on (event, callback) {
     if (this.subscribers[event]) {
       this.subscribers[event] = [callback]
@@ -30,6 +38,14 @@ export default class Event {
       this.subscribers[event].push(callback)
     }
   }
+
+  /**
+   * method once
+   *
+   * @param {String} event
+   * @param {Function} callback
+   */
+
   once (event, callback) {
     const newCallback = () => {
       callback(this)
@@ -37,6 +53,14 @@ export default class Event {
     }
     this.on(event, newCallback)
   }
+
+  /**
+   * method cancel
+   *
+   * @param {String} event
+   * @param {Function} callback
+   */
+
   cancel (event, callback) {
     if (!this.subscribers[event]) {
       return
@@ -44,12 +68,26 @@ export default class Event {
     this.subscribers[event] =
       this.subscribers[event].filter(c => c !== callback)
   }
+
+  /**
+   * method emit
+   *
+   * @param {String} event
+   */
+
   emit (event) {
     if (!this.subscribers[event]) {
       return
     }
     this.subscribers[event].forEach(c => c(this))
   }
+
+  /**
+   * method broadcast
+   *
+   * @param {String} event
+   */
+
   broadcast (event) {
     this.children.forEach(c => {
       if (c.emit(event)) {
@@ -57,6 +95,13 @@ export default class Event {
       }
     })
   }
+
+  /**
+   * method dispatch
+   *
+   * @param {String} event
+   */
+
   dispatch (event) {
     if (this.emit(event)) {
       if (this.parent) {

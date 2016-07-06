@@ -6,11 +6,25 @@ import {
 } from '../../dom/'
 
 export default class VIf extends VDirective {
+
+  /**
+   * class VIf
+   *
+   * @param {VTerminal} terminal
+   */
+
   constructor (...args) {
     super(...args)
     this.value = this.attributes['*if']
     this.show = false
   }
+
+  /**
+   * method update
+   *
+   * @param {*} newVal
+   */
+
   update (newVal) {
     if (newVal) {
       if (!this.insert) {

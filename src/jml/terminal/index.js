@@ -18,6 +18,14 @@ DIRCTIVE_KEYS.forEach(key => {
 })
 
 export default class VTerminal extends VN {
+
+  /**
+   * class VTerminal
+   *
+   * @param {Array} jml
+   * @param {Vexil} vexil
+   */
+
   constructor (...args) {
     super(...args)
     this.node = createFragment()
@@ -25,6 +33,11 @@ export default class VTerminal extends VN {
       generate(this)
     }
   }
+
+  /**
+   * method init
+   */
+
   init () {
     if (this.watchers[0]) {
       this.watchers[0].init()

@@ -6,6 +6,13 @@ import {
 } from '../../dom/'
 
 export default class VFor extends VDirective {
+
+  /**
+   * class VFor
+   *
+   * @param {VTerminal} terminal
+   */
+
   constructor (...args) {
     super(...args)
     this.value = this.attributes['*for']
@@ -13,6 +20,13 @@ export default class VFor extends VDirective {
     this.variable = this.attributes['_forKey']
     this.child = this.children[0]
   }
+
+  /**
+   * method update
+   *
+   * @param {Array} array
+   */
+
   update (array) {
     if (this.vNodes) {
       this.vNodes.forEach(vNode => {
@@ -37,9 +51,19 @@ export default class VFor extends VDirective {
     })
     this.vexil._scope = this.scope
   }
+
+  /**
+   * method insert
+   */
+
   insert () {
     this.bind()
   }
+
+  /**
+   * method remove
+   */
+
   remove () {
     this.unbind()
   }

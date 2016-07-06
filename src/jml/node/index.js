@@ -10,6 +10,14 @@ import {
 import {PROPERTIES} from '../../dom/constant'
 
 export default class VNode extends VN {
+
+  /**
+   * class VNode
+   *
+   * @param {Array} jml
+   * @param {Vexil} vexil
+   */
+
   constructor (...args) {
     super(...args)
     this.node = createElement(this.name)

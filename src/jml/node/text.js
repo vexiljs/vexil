@@ -6,6 +6,14 @@ import watch from '../watch'
 import {isFun} from '../../util/'
 
 export default class VText {
+
+  /**
+   * class VText
+   *
+   * @param {Function} text
+   * @param {Vexil} vexil
+   */
+
   constructor (text, vexil) {
     if (isFun(text)) {
       this.watcher = watch(text, this.update.bind(this), vexil)
@@ -20,9 +28,21 @@ export default class VText {
     }
     this.node = createText(text)
   }
+
+  /**
+   * method update
+   *
+   * @param {*} value
+   */
+
   update (value) {
     setAttribute(this.node, value)
   }
+
+  /**
+   * method destroy
+   */
+
   destroy () {
     this.watcher && this.watcher.teardown()
   }

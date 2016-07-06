@@ -1,14 +1,14 @@
-/**
- * class VN
- *
- * @param {Array} jml
- * @param {Vexil} vexil
- * @returns {VN}
- */
-
 let uid = 0
 
 export default class VN {
+
+  /**
+   * class VN
+   *
+   * @param {Array} jml
+   * @param {Vexil} vexil
+   */
+
   constructor (jml, vexil) {
     this.uid = uid++
     this.jml = jml
@@ -19,18 +19,33 @@ export default class VN {
     this.watchers = []
     this.binded = true
   }
+
+  /**
+   * method bind
+   */
+
   bind () {
     if (!this.binded) {
       this.watchers.forEach(v => v.bind())
       this.binded = true
     }
   }
+
+  /**
+   * method unbind
+   */
+
   unbind () {
     if (this.binded) {
       this.watchers.forEach(v => v.unbind())
       this.binded = false
     }
   }
+
+  /**
+   * method destroy
+   */
+
   destroy () {
     this.watchers.forEach(v => v.destroy())
   }

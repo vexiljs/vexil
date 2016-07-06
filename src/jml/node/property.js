@@ -2,6 +2,16 @@ import watch from '../watch'
 import {isFun} from '../../util/'
 
 export default class VProperty {
+
+  /**
+   * class VProperty
+   *
+   * @param {Element} node
+   * @param {String} property
+   * @param {Function} value
+   * @param {Vexil} vexil
+   */
+
   constructor (node, property, value, vexil) {
     this.node = node
     this.property = property
@@ -19,9 +29,21 @@ export default class VProperty {
       this.update(value)
     }
   }
+
+  /**
+   * method update
+   *
+   * @param {*} value
+   */
+
   update (value) {
     this.node[this.property] = value
   }
+
+  /**
+   * method destroy
+   */
+
   destroy () {
     this.watcher && this.watcher.teardown()
   }
