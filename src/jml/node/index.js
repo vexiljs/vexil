@@ -39,9 +39,9 @@ export default class VNode extends VN {
         }
       })
     }
-    if (this.children) {
+    if (this.childNodes) {
       let vNode
-      this.children.forEach(child => {
+      this.childNodes.forEach(child => {
         vNode = render(child, this.vexil)
         appendChild(this.node, vNode.node)
         if (vNode.unbind) {

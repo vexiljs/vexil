@@ -18,7 +18,7 @@ export default class VFor extends VDirective {
     this.value = this.attributes['*for']
     this.scope = this.vexil._scope
     this.variable = this.attributes['_forKey']
-    this.child = this.children[0]
+    this.child = this.childNodes[0]
   }
 
   /**

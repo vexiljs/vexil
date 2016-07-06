@@ -1,20 +1,21 @@
-let uid = 0
+import Event from '../event'
 
-export default class VN {
+export default class VN extends Event {
 
   /**
    * class VN
    *
    * @param {Array} jml
    * @param {Vexil} vexil
+   * @param {VN} [parent]
    */
 
-  constructor (jml, vexil) {
-    this.uid = uid++
+  constructor (jml, vexil, parent) {
+    super(parent)
     this.jml = jml
     this.name = jml[0]
     this.attributes = jml[1]
-    this.children = jml[2]
+    this.childNodes = jml[2]
     this.vexil = vexil
     this.watchers = []
     this.binded = true

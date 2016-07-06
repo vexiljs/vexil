@@ -39,7 +39,7 @@ export default class VIf extends VDirective {
         } else {
           if (!this.vNodes) {
             let vNode
-            this.vNodes = this.children.map(child => {
+            this.vNodes = this.childNodes.map(child => {
               vNode = render(child, this.vexil)
               return vNode
             })

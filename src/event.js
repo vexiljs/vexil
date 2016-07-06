@@ -1,26 +1,15 @@
-let uid = 0
+import Tree from './tree'
 
-export default class Event {
+export default class Event extends Tree {
 
   /**
    * class Event
    *
-   * @param {Object} owner
    * @param {Event} [parent]
    */
 
-  constructor (owner, parent) {
-    this.uid = uid++
-    this.owner = owner
-    if (parent) {
-      this.parent = parent
-      this.root = parent.root
-      parent.children.push(this)
-    } else {
-      this.root = this
-      this.parent = null
-    }
-    this.children = []
+  constructor (parent) {
+    super(parent)
     this.subscribers = {}
   }
 

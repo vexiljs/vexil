@@ -20,7 +20,7 @@ export default class VDirective {
     this.head = createComment(name)
     appendChild(terminal.node, this.head)
     this.attributes = terminal.attributes
-    this.children = terminal.children
+    this.childNodes = terminal.childNodes
     this.vexil = terminal.vexil
     this.vNodes = null
     terminal.watchers.push(this)
