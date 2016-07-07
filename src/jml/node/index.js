@@ -33,7 +33,7 @@ export default class VNode extends VN {
           } else { // attribute
             vAttribute = new VAttribute(this.node, key, val, this.vexil)
           }
-          if (vAttribute.unbind) {
+          if (vAttribute.active) {
             this.watchers.push(vAttribute)
           }
         }
@@ -44,10 +44,13 @@ export default class VNode extends VN {
       this.childNodes.forEach(child => {
         vNode = render(child, this.vexil)
         appendChild(this.node, vNode.node)
-        if (vNode.unbind) {
+        if (vNode.active) {
           this.watchers.push(vNode)
         }
       })
+    }
+    if (this.watchers.length) {
+      this.active = true
     }
   }
 }

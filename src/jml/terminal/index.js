@@ -30,6 +30,7 @@ export default class VTerminal extends VN {
     super(...args)
     this.node = createFragment()
     if (this.attributes) {
+      this.active = true
       generate(this)
     }
   }

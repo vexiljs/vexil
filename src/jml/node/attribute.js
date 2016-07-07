@@ -30,6 +30,7 @@ export default class VAttribute {
         this.watcher.active = true
         this.watcher.run()
       }
+      this.active = true
     } else {
       this.update(value)
     }

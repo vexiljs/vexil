@@ -25,6 +25,7 @@ export default class VText {
         this.watcher.active = true
         this.watcher.run()
       }
+      this.active = true
     }
     this.node = createText(text)
   }

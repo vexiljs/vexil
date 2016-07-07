@@ -18,7 +18,8 @@ export default class VN extends Tree {
     this.childNodes = jml[2]
     this.vexil = vexil
     this.watchers = []
-    this.binded = true
+    this.binded = false
+    this.active = false
   }
 
   /**
@@ -48,6 +49,9 @@ export default class VN extends Tree {
    */
 
   destroy () {
-    this.watchers.forEach(v => v.destroy())
+    if (this.active) {
+      this.active = false
+      this.watchers.forEach(v => v.destroy())
+    }
   }
 }
