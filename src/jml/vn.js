@@ -1,6 +1,6 @@
-import Event from '../event'
+import Tree from '../tree'
 
-export default class VN extends Event {
+export default class VN extends Tree {
 
   /**
    * class VN
