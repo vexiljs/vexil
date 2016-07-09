@@ -3,7 +3,7 @@ import {
   query,
   appendChild,
 } from './dom/'
-import ob from 'ob.js'
+import ob from './ob'
 import {isStr} from './util/'
 
 export default class Vexil {
