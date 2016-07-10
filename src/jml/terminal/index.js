@@ -24,10 +24,11 @@ export default class VTerminal extends VN {
    *
    * @param {Array} jml
    * @param {Vexil} vexil
+   * @param {VN} [parent]
    */
 
-  constructor (...args) {
-    super(...args)
+  constructor (jml, vexil, parent) {
+    super(jml, vexil, parent)
     this.node = createFragment()
     if (this.attributes) {
       this.active = true
@@ -36,12 +37,12 @@ export default class VTerminal extends VN {
   }
 
   /**
-   * method init
+   * method bind
    */
 
-  init () {
+  bind () {
     if (this.watchers[0]) {
-      this.watchers[0].init()
+      this.watchers[0].bind()
     }
   }
 }
@@ -51,7 +52,7 @@ let index
 function generate (terminal) {
   index = 0
   $generate(terminal)
-  terminal.init()
+  terminal.bind()
 }
 
 function $generate (terminal, before) {

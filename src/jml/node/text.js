@@ -16,7 +16,7 @@ export default class VText extends VP {
   constructor (value, vexil) {
     super(value, vexil)
     this.node = createText(value)
-    this.init()
+    this.bind()
   }
 
   /**

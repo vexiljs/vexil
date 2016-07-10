@@ -21,7 +21,7 @@ export default class VAttribute extends VP {
     super(value, vexil)
     this.attribute = createAttribute(attribute)
     applyAttribute(node, this.attribute)
-    this.init()
+    this.bind()
   }
 
   /**

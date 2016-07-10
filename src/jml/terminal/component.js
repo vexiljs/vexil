@@ -1,4 +1,4 @@
-import VDirective from './directive'
+import VC from '../vc'
 import Vexil from '../../index'
 import {
   insertBefore,
@@ -6,7 +6,7 @@ import {
   removeChildByParent,
 } from '../../dom/'
 
-export default class VComponent extends VDirective {
+export default class VComponent extends VC {
 
   /**
    * class VComponent
@@ -14,17 +14,17 @@ export default class VComponent extends VDirective {
    * @param {VTerminal} terminal
    */
 
-  constructor (...args) {
-    super(...args)
+  constructor (terminal) {
+    super(terminal)
     let name = this.attributes['component']
     this.jml = this.vexil.$components[name]
   }
 
   /**
-   * method init
+   * method bind
    */
 
-  init () {
+  bind () {
     this.instance = new Vexil(this.jml)
   }
 
@@ -55,10 +55,10 @@ export default class VComponent extends VDirective {
   }
 
   /**
-   * method destroy
+   * method unbind
    */
 
-  destroy () {
+  unbind () {
     removeChildByParent(this.head)
   }
 }

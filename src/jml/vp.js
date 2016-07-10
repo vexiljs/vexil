@@ -17,10 +17,10 @@ export default class VP {
   }
 
   /**
-   * method init
+   * method bind
    */
 
-  init () {
+  bind () {
     if (isFun(this.value)) {
       this.watcher = watch(
         this.value,
@@ -28,35 +28,38 @@ export default class VP {
         this.vexil
       )
       this.update(this.watcher.value)
-      this.bind = VP.bind
-      this.unbind = VP.unbind
+      this.suspend = VP.suspend
+      this.resume = VP.resume
     } else {
       this.update(this.value)
     }
   }
 
   /**
-   * method destroy
+   * method unbind
    */
 
-  destroy () {
-    this.watcher && this.watcher.teardown()
+  unbind () {
+    if (this.watcher) {
+      this.watcher.teardown()
+      this.watcher = null
+    }
   }
 
   /**
-   * static method bind
+   * static method suspend
    */
 
-  static bind () {
+  static suspend () {
     this.watcher.active = true
     this.watcher.run()
   }
 
   /**
-   * static method unbind
+   * static method resume
    */
 
-  static unbind () {
+  static resume () {
     this.watcher.active = false
   }
 }

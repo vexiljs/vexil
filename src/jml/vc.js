@@ -1,15 +1,15 @@
-import watch from '../watch'
+import watch from './watch'
 import {
   createComment,
   appendChild,
   removeChildByParent,
-} from '../../dom/'
-import {DIRCTIVE_HEADS} from './index'
+} from '../dom/'
+import {DIRCTIVE_HEADS} from './terminal/'
 
-export default class VDirective {
+export default class VC {
 
   /**
-   * class VDirective
+   * class VC
    *
    * @param {VTerminal} terminal
    */
@@ -27,10 +27,10 @@ export default class VDirective {
   }
 
   /**
-   * method init
+   * method bind
    */
 
-  init () {
+  bind () {
     this.watcher = watch(this.value, (value) => {
       this.update(value)
     }, this.vexil)
@@ -38,12 +38,21 @@ export default class VDirective {
   }
 
   /**
-   * method bind
+   * method suspend
    */
 
-  bind () {
+  suspend () {
     this.watcher.active = true
     this.watcher.run()
+  }
+
+  /**
+   * method resume
+   */
+
+  resume () {
+    this.watcher.active = false
+    this.update(null)
   }
 
   /**
@@ -51,16 +60,7 @@ export default class VDirective {
    */
 
   unbind () {
-    this.watcher.active = false
-    this.update(null)
-  }
-
-  /**
-   * method destroy
-   */
-
-  destroy () {
-    this.unbind()
+    this.resume()
     this.watcher.teardown()
     removeChildByParent(this.head)
   }

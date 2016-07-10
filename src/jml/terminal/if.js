@@ -1,11 +1,11 @@
-import VDirective from './directive'
+import VC from '../vc'
 import render from '../render'
 import {
   insertBefore,
   removeNodeByHead,
 } from '../../dom/'
 
-export default class VIf extends VDirective {
+export default class VIf extends VC {
 
   /**
    * class VIf
@@ -13,8 +13,8 @@ export default class VIf extends VDirective {
    * @param {VTerminal} terminal
    */
 
-  constructor (...args) {
-    super(...args)
+  constructor (terminal) {
+    super(terminal)
     this.value = this.attributes['*if']
     this.show = false
   }
@@ -29,7 +29,7 @@ export default class VIf extends VDirective {
     if (newVal) {
       if (!this.insert) {
         if (this.next) {
-          this.next.init()
+          this.next.bind()
           this.insert = () => {
             this.next.insert()
           }
@@ -46,7 +46,7 @@ export default class VIf extends VDirective {
           }
           this.insert = () => {
             this.vNodes.forEach(vNode => {
-              vNode.bind()
+              vNode.suspend()
               insertBefore(this.head, vNode.node)
             })
           }
@@ -54,7 +54,7 @@ export default class VIf extends VDirective {
             if (this.vNodes) {
               this.vNodes.forEach(vNode => {
                 removeNodeByHead(this.head, vNode.node)
-                vNode.unbind()
+                vNode.resume()
               })
             }
           }

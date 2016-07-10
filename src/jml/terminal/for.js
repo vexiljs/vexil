@@ -1,11 +1,11 @@
-import VDirective from './directive'
+import VC from '../vc'
 import render from '../render'
 import {
   insertBefore,
   removeNodeByHead,
 } from '../../dom/'
 
-export default class VFor extends VDirective {
+export default class VFor extends VC {
 
   /**
    * class VFor
@@ -13,8 +13,8 @@ export default class VFor extends VDirective {
    * @param {VTerminal} terminal
    */
 
-  constructor (...args) {
-    super(...args)
+  constructor (terminal) {
+    super(terminal)
     this.value = this.attributes['*for']
     this.scope = this.vexil._scope
     this.variable = this.attributes['_forKey']
@@ -31,7 +31,7 @@ export default class VFor extends VDirective {
     if (this.vNodes) {
       this.vNodes.forEach(vNode => {
         removeNodeByHead(this.head, vNode.node)
-        vNode.destroy()
+        vNode.unbind()
       })
       this.vNodes = null
     }
@@ -57,7 +57,7 @@ export default class VFor extends VDirective {
    */
 
   insert () {
-    this.bind()
+    this.suspend()
   }
 
   /**
@@ -65,6 +65,6 @@ export default class VFor extends VDirective {
    */
 
   remove () {
-    this.unbind()
+    this.resume()
   }
 }

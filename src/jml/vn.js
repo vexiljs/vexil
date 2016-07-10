@@ -18,18 +18,29 @@ export default class VN extends Tree {
     this.childNodes = jml[2]
     this.vexil = vexil
     this.watchers = []
-    this.binded = false
+    this.sleeping = false
     this.active = false
   }
 
   /**
-   * method bind
+   * method suspend
    */
 
-  bind () {
-    if (!this.binded) {
-      this.watchers.forEach(v => v.bind())
-      this.binded = true
+  suspend () {
+    if (!this.sleeping) {
+      this.watchers.forEach(v => v.suspend())
+      this.sleeping = true
+    }
+  }
+
+  /**
+   * method resume
+   */
+
+  resume () {
+    if (this.sleeping) {
+      this.watchers.forEach(v => v.resume())
+      this.sleeping = false
     }
   }
 
@@ -38,20 +49,9 @@ export default class VN extends Tree {
    */
 
   unbind () {
-    if (this.binded) {
-      this.watchers.forEach(v => v.unbind())
-      this.binded = false
-    }
-  }
-
-  /**
-   * method destroy
-   */
-
-  destroy () {
     if (this.active) {
       this.active = false
-      this.watchers.forEach(v => v.destroy())
+      this.watchers.forEach(v => v.unbind())
     }
   }
 }

@@ -16,6 +16,7 @@ export default class VNode extends VN {
    *
    * @param {Array} jml
    * @param {Vexil} vexil
+   * @param {VN} parent
    */
 
   constructor (jml, vexil, parent) {

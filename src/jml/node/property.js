@@ -15,7 +15,7 @@ export default class VProperty extends VP {
     super(value, vexil)
     this.node = node
     this.property = property
-    this.init()
+    this.bind()
   }
 
   /**
