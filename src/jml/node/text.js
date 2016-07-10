@@ -1,33 +1,22 @@
+import VP from '../vp'
 import {
   createText,
   setAttribute,
 } from '../../dom/'
-import watch from '../watch'
-import {isFun} from '../../util/'
 
-export default class VText {
+export default class VText extends VP {
 
   /**
    * class VText
    *
-   * @param {Function} text
+   * @param {Function|String} value
    * @param {Vexil} vexil
    */
 
-  constructor (text, vexil) {
-    if (isFun(text)) {
-      this.watcher = watch(text, this.update.bind(this), vexil)
-      text = this.watcher.value
-      this.unbind = function unbind () {
-        this.watcher.active = false
-      }
-      this.bind = function bind () {
-        this.watcher.active = true
-        this.watcher.run()
-      }
-      this.active = true
-    }
-    this.node = createText(text)
+  constructor (value, vexil) {
+    super(value, vexil)
+    this.node = createText(value)
+    this.init()
   }
 
   /**
@@ -38,13 +27,5 @@ export default class VText {
 
   update (value) {
     setAttribute(this.node, value)
-  }
-
-  /**
-   * method destroy
-   */
-
-  destroy () {
-    this.watcher && this.watcher.teardown()
   }
 }

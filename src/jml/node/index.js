@@ -18,8 +18,8 @@ export default class VNode extends VN {
    * @param {Vexil} vexil
    */
 
-  constructor (...args) {
-    super(...args)
+  constructor (jml, vexil, parent) {
+    super(jml, vexil, parent)
     this.node = createElement(this.name)
     if (this.attributes) {
       Object.keys(this.attributes).forEach(key => {

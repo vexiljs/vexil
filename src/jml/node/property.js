@@ -1,34 +1,21 @@
-import watch from '../watch'
-import {isFun} from '../../util/'
+import VP from '../vp'
 
-export default class VProperty {
+export default class VProperty extends VP {
 
   /**
    * class VProperty
    *
    * @param {Element} node
    * @param {String} property
-   * @param {Function} value
+   * @param {Function|String} value
    * @param {Vexil} vexil
    */
 
   constructor (node, property, value, vexil) {
+    super(value, vexil)
     this.node = node
     this.property = property
-    if (isFun(value)) {
-      this.watcher = watch(value, this.update.bind(this), vexil)
-      this.update(this.watcher.value)
-      this.unbind = function unbind () {
-        this.watcher.active = false
-      }
-      this.bind = function bind () {
-        this.watcher.active = true
-        this.watcher.run()
-      }
-      this.active = true
-    } else {
-      this.update(value)
-    }
+    this.init()
   }
 
   /**
@@ -39,13 +26,5 @@ export default class VProperty {
 
   update (value) {
     this.node[this.property] = value
-  }
-
-  /**
-   * method destroy
-   */
-
-  destroy () {
-    this.watcher && this.watcher.teardown()
   }
 }
