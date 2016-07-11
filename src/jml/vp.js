@@ -4,7 +4,7 @@ import {isFun} from '../util/'
 export default class VP {
 
   /**
-   * class VP
+   * abstract class VP
    *
    * @param {Function|String} value
    * @param {Vexil} vexil

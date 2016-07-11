@@ -25,14 +25,25 @@ export default class VComponent extends VC {
    */
 
   bind () {
-    this.instance = new Vexil(this.jml)
+    this.instance = new Vexil(this.jml, this.vexil)
+    this.watchers = this.instance.$vdom.watchers
+    this.insert()
   }
 
   /**
-   * method update
+   * method suspend
    */
 
-  update () {
+  suspend () {
+    this.watchers.forEach(v => v.suspend())
+  }
+
+  /**
+   * method resume
+   */
+
+  resume () {
+    this.watchers.forEach(v => v.resume())
   }
 
   /**

@@ -4,7 +4,7 @@
     <h1 *if="show" :style="styl">
       <strong :text="title"></strong>!!!!
     </h1>
-    <p *for="p in arr" :class="claz" :text="($index + 1) + '. ' + p"></p>
+    <p *if="show" *for="p in arr" :class="claz" :text="($index + 1) + '. ' + p"></p>
   </div>
   <div class="demo-item">
   <template *if="true">
@@ -12,10 +12,15 @@
     <pre id="output"></pre>
   </template>
   </div>
+  <div class="demo-item">
+    <template component="component"></template>
+  </div>
 </div>
 </template>
 
 <script>
+const component = require('./component.vex')
+
 module.exports = {
   data: {
     arr: ['This is first paragraph', 'This is second paragraph'],
@@ -25,6 +30,9 @@ module.exports = {
     title: 'This is title!',
     name: 'world',
     show: true,
+  },
+  components: {
+    component,
   },
   computed: {
     styl1 () {

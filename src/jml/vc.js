@@ -4,26 +4,28 @@ import {
   appendChild,
   removeChildByParent,
 } from '../dom/'
-import {DIRCTIVE_HEADS} from './terminal/'
+import {COMMAND_HEADS} from './terminal/'
 
 export default class VC {
 
   /**
-   * class VC
+   * abstract class VC
    *
    * @param {VTerminal} terminal
    */
 
   constructor (terminal) {
     let name = this.constructor.name
-    name = DIRCTIVE_HEADS[name]
+    name = COMMAND_HEADS[name]
     this.head = createComment(name)
     appendChild(terminal.node, this.head)
     this.attributes = terminal.attributes
     this.childNodes = terminal.childNodes
+    this.children = terminal.children
     this.vexil = terminal.vexil
     this.vNodes = null
     terminal.watchers.push(this)
+    this.next = terminal
   }
 
   /**

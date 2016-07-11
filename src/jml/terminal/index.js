@@ -2,19 +2,24 @@ import VN from '../vn'
 import VIf from './if'
 import VFor from './for'
 import VComponent from './component'
-import {createFragment} from '../../dom/'
+import render from '../render'
+import {
+  createFragment,
+  insertBefore,
+  removeNodeByHead,
+} from '../../dom/'
 
-const DIRCTIVES = {
+const COMMANDS = {
   '*if': VIf,
   '*for': VFor,
   'component': VComponent,
 }
-const DIRCTIVE_KEYS = Object.keys(DIRCTIVES)
+const COMMAND_KEYS = Object.keys(COMMANDS).reverse()
 
-export const DIRCTIVE_HEADS = {}
-DIRCTIVE_KEYS.forEach(key => {
-  let name = DIRCTIVES[key].name
-  DIRCTIVE_HEADS[name] = key.replace('*', '')
+export const COMMAND_HEADS = {}
+COMMAND_KEYS.forEach(key => {
+  let name = COMMANDS[key].name
+  COMMAND_HEADS[name] = key.replace('*', '')
 })
 
 export default class VTerminal extends VN {
@@ -31,9 +36,32 @@ export default class VTerminal extends VN {
     super(jml, vexil, parent)
     this.node = createFragment()
     if (this.attributes) {
+      let command = this._generate()
+      command.bind()
       this.active = true
-      generate(this)
     }
+  }
+
+  /**
+   * method generate
+   *
+   * @private
+   * @returns {VC|VN} command
+   */
+
+  _generate () {
+    let command = this
+    let value, cmd, Cmd
+    COMMAND_KEYS.forEach(key => {
+      value = this.attributes[key]
+      if (value) {
+        Cmd = COMMANDS[key]
+        cmd = new Cmd(this)
+        cmd.next = command
+        command = cmd
+      }
+    })
+    return command
   }
 
   /**
@@ -41,33 +69,32 @@ export default class VTerminal extends VN {
    */
 
   bind () {
-    if (this.watchers[0]) {
-      this.watchers[0].bind()
-    }
+    let vNode
+    this.children = this.childNodes.map(child => {
+      vNode = render(child, this.vexil)
+      return vNode
+    })
   }
-}
 
-let index
+  /**
+   * method insert
+   */
 
-function generate (terminal) {
-  index = 0
-  $generate(terminal)
-  terminal.bind()
-}
-
-function $generate (terminal, before) {
-  let key = DIRCTIVE_KEYS[index]
-  if (!key) {
-    return
+  insert (head) {
+    this.children.forEach(vNode => {
+      vNode.suspend()
+      insertBefore(head, vNode.node)
+    })
   }
-  let v
-  if (terminal.attributes[key]) {
-    v = new DIRCTIVES[key](terminal)
-    if (before) {
-      v.before = before
-      before.next = v
-    }
+
+  /**
+   * method remove
+   */
+
+  remove (head) {
+    this.children.forEach(vNode => {
+      removeNodeByHead(head, vNode.node)
+      vNode.resume()
+    })
   }
-  index++
-  $generate(terminal, v || before)
 }

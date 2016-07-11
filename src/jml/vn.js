@@ -3,7 +3,7 @@ import Tree from '../tree'
 export default class VN extends Tree {
 
   /**
-   * class VN
+   * abstract class VN
    *
    * @param {Array} jml
    * @param {Vexil} vexil
@@ -18,6 +18,7 @@ export default class VN extends Tree {
     this.childNodes = jml[2]
     this.vexil = vexil
     this.watchers = []
+    this.children = []
     this.sleeping = false
     this.active = false
   }

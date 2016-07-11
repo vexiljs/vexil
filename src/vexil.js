@@ -1,3 +1,4 @@
+import Tree from './tree'
 import render from './jml/'
 import {
   query,
@@ -6,15 +7,17 @@ import {
 import ob from './ob'
 import {isStr} from './util/'
 
-export default class Vexil {
+export default class Vexil extends Tree {
 
   /**
    * class Vexil
    *
    * @param {Object} vexil
+   * @param {Vexil} [parent]
    */
 
-  constructor (vexil) {
+  constructor (vexil, parent) {
+    super(parent)
     this.$jml = vexil.$jml
     this.$create = vexil.create
     this.$mount = vexil.mount
@@ -32,7 +35,8 @@ export default class Vexil {
    */
 
   render () {
-    this.$dom = render(this).node
+    this.$vdom = render(this)
+    this.$dom = this.$vdom.node
   }
 
   /**

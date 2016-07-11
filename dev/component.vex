@@ -1,0 +1,24 @@
+<template>
+<div class="claz_component" *if="show" :text="text"></div>
+</template>
+
+<script>
+module.exports = {
+  data: {
+    text: 'this is from component',
+    show: true,
+  },
+  mount () {
+    setInterval(() => {
+      this.show = !this.show
+    }, 1000)
+  },
+}
+</script>
+
+<style>
+.claz_component {
+  color: blue;
+  font-size: 20px;
+}
+</style>

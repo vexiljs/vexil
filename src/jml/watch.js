@@ -1,9 +1,9 @@
 const WATCH_OPTION = {deep: true}
 
-export default function watch (func, callback, vexil) {
+export default function watch (func, callback, vexil, option) {
   return vexil.$ob.watch(() => {
     return evaluate(func, vexil)
-  }, callback, WATCH_OPTION)
+  }, callback, option || WATCH_OPTION)
 }
 
 export function evaluate (func, vexil) {

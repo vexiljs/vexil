@@ -1,15 +1,12 @@
-let uid = 0
-
 export default class Tree {
 
   /**
-   * class Tree
+   * abstract class Tree
    *
    * @param {Tree} parent
    */
 
   constructor (parent) {
-    this.uid = uid++
     if (parent) {
       this.parent = parent
       this.root = parent.root
