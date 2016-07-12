@@ -5,6 +5,8 @@ import VComponent from './component'
 import render from '../render'
 import {
   createFragment,
+  createComment,
+  appendChild,
   insertBefore,
   removeNodeByHead,
 } from '../../dom/'
@@ -35,11 +37,13 @@ export default class VTerminal extends VN {
   constructor (jml, vexil, parent) {
     super(jml, vexil, parent)
     this.node = createFragment()
+    this.head = createComment('terminal')
+    appendChild(this.node, this.head)
     if (this.attributes) {
       let command = this._generate()
       command.bind()
-      this.active = true
     }
+    this.active = true
   }
 
   /**
@@ -71,29 +75,33 @@ export default class VTerminal extends VN {
   bind () {
     let vNode
     this.children = this.childNodes.map(child => {
-      vNode = render(child, this.vexil)
+      vNode = render(child, this.vexil, this)
       return vNode
     })
   }
 
   /**
-   * method insert
+   * method insertChildren
+   *
+   * @private
    */
 
-  insert (head) {
+  insertChildren () {
     this.children.forEach(vNode => {
       vNode.suspend()
-      insertBefore(head, vNode.node)
+      insertBefore(this.head, vNode.node)
     })
   }
 
   /**
-   * method remove
+   * method removeChildren
+   *
+   * @private
    */
 
-  remove (head) {
+  removeChildren () {
     this.children.forEach(vNode => {
-      removeNodeByHead(head, vNode.node)
+      removeNodeByHead(this.head, vNode.node)
       vNode.resume()
     })
   }

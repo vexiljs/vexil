@@ -30,7 +30,7 @@ export default class VFor extends VC {
   update (array) {
     if (this.vNodes) {
       this.vNodes.forEach(vNode => {
-        removeNodeByHead(this.head, vNode.node)
+        removeNodeByHead(this.terminal.head, vNode.node)
         vNode.unbind()
       })
       this.vNodes = null
@@ -45,26 +45,26 @@ export default class VFor extends VC {
     array.forEach((v, k) => {
       newScope[this.variable] = v
       newScope.$index = k
-      let vNode = render(this.child, this.vexil)
-      insertBefore(this.head, vNode.node)
+      let vNode = render(this.child, this.vexil, this.terminal)
+      insertBefore(this.terminal.head, vNode.node)
       this.vNodes.push(vNode)
     })
     this.vexil._scope = this.scope
   }
 
   /**
-   * method insert
+   * method insertChildren
    */
 
-  insert () {
+  insertChildren () {
     this.suspend()
   }
 
   /**
-   * method remove
+   * method removeChildren
    */
 
-  remove () {
+  removeChildren () {
     this.resume()
   }
 }

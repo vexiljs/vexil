@@ -1,10 +1,5 @@
 import watch from './watch'
-import {
-  createComment,
-  appendChild,
-  removeChildByParent,
-} from '../dom/'
-import {COMMAND_HEADS} from './terminal/'
+import {removeChildByParent} from '../dom/'
 
 export default class VC {
 
@@ -15,10 +10,7 @@ export default class VC {
    */
 
   constructor (terminal) {
-    let name = this.constructor.name
-    name = COMMAND_HEADS[name]
-    this.head = createComment(name)
-    appendChild(terminal.node, this.head)
+    this.terminal = terminal
     this.attributes = terminal.attributes
     this.childNodes = terminal.childNodes
     this.children = terminal.children

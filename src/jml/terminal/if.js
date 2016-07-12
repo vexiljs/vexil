@@ -27,30 +27,30 @@ export default class VIf extends VC {
         this.next.bind()
         this.nextBinded = true
       }
-      this.insert()
+      this.insertChildren()
       this.show = true
     } else {
       if (!this.show) {
         return
       }
-      this.remove()
+      this.removeChildren()
       this.show = false
     }
   }
 
   /**
-   * method insert
+   * method insertChildren
    */
 
-  insert () {
-    this.next.insert(this.head)
+  insertChildren () {
+    this.next.insertChildren()
   }
 
   /**
-   * method remove
+   * method removeChildren
    */
 
-  remove () {
-    this.next.remove(this.head)
+  removeChildren () {
+    this.next.removeChildren()
   }
 }

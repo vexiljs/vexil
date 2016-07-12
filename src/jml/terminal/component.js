@@ -27,7 +27,7 @@ export default class VComponent extends VC {
   bind () {
     this.instance = new Vexil(this.jml, this.vexil)
     this.watchers = this.instance.$vdom.watchers
-    this.insert()
+    this.insertChildren()
   }
 
   /**
@@ -47,22 +47,22 @@ export default class VComponent extends VC {
   }
 
   /**
-   * method insert
+   * method insertChildren
    */
 
-  insert () {
-    insertBefore(this.head, this.instance.$dom)
+  insertChildren () {
+    insertBefore(this.terminal.head, this.instance.$dom)
     if (this.instance.$mount) {
       this.instance.$mount()
     }
   }
 
   /**
-   * method remove
+   * method removeChildren
    */
 
-  remove () {
-    removeNodeByHead(this.head, this.instance.$dom)
+  removeChildren () {
+    removeNodeByHead(this.terminal.head, this.instance.$dom)
   }
 
   /**

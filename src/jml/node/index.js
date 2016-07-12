@@ -43,7 +43,7 @@ export default class VNode extends VN {
     if (this.childNodes) {
       let vNode
       this.childNodes.forEach(child => {
-        vNode = render(child, this.vexil)
+        vNode = render(child, this.vexil, this)
         appendChild(this.node, vNode.node)
         if (vNode.active) {
           this.watchers.push(vNode)
