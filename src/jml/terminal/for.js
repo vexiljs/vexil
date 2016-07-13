@@ -40,7 +40,7 @@ export default class VFor extends VC {
       return
     }
     this.vNodes = []
-    let newScope = Object.assign({}, this.scope)
+    let newScope = Object.create(this.scope)
     this.vexil._scope = newScope
     array.forEach((v, k) => {
       newScope[this.variable] = v
